@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🕐 Học Thời Gian – Lớp 1</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#f0f6ff;min-height:100vh;padding:16px}
+h1{text-align:center;font-size:22px;color:#1a5fa8;margin-bottom:4px;padding-top:8px}
+.subtitle{text-align:center;font-size:13px;color:#6b7280;margin-bottom:16px}
+.tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;justify-content:center}
+.tab{padding:9px 18px;border-radius:20px;border:2px solid #c7d9f0;background:#fff;color:#5a7fa8;cursor:pointer;font-size:13px;font-weight:600;transition:all .15s}
+.tab.active{background:#1a5fa8;border-color:#1a5fa8;color:#fff}
+.panel{display:none}.panel.active{display:block}
+.question-card{background:#fff;border:1.5px solid #d1e3f8;border-radius:16px;padding:20px 24px;margin-bottom:12px;box-shadow:0 2px 8px rgba(26,95,168,.07)}
+.qtext{font-size:17px;font-weight:600;color:#1e293b;margin-bottom:16px;line-height:1.5}
+.qhint{font-size:13px;color:#6b7280;margin-bottom:12px;text-align:center}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{padding:13px;border-radius:12px;border:2px solid #c7d9f0;background:#f0f6ff;cursor:pointer;font-size:15px;font-weight:600;color:#1a5fa8;text-align:center;transition:all .15s}
+.opt:hover{border-color:#1a5fa8;background:#dbeafe;color:#1e40af}
+.opt.correct{background:#d1fae5;border-color:#10b981;color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b}
+.opt.disabled{pointer-events:none}
+.feedback{padding:12px 16px;border-radius:10px;font-size:14px;font-weight:600;margin-top:12px;display:none;line-height:1.5}
+.feedback.show{display:block}
+.feedback.ok{background:#d1fae5;color:#065f46}
+.feedback.no{background:#fee2e2;color:#991b1b}
+.score-bar{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.score-pill{background:#dbeafe;color:#1a5fa8;border-radius:20px;padding:6px 14px;font-size:13px;font-weight:700}
+.next-btn{padding:10px 24px;background:#1a5fa8;color:#fff;border:none;border-radius:20px;font-size:14px;font-weight:700;cursor:pointer;margin-top:12px;display:none;transition:background .15s}
+.next-btn.show{display:inline-block}
+.next-btn:hover{background:#1e40af}
+.clock-svg{display:block;margin:0 auto 12px}
+.week-strip{display:flex;gap:4px;margin-bottom:14px}
+.day-box{flex:1;padding:7px 3px;border-radius:8px;border:2px solid #d1e3f8;text-align:center;font-size:12px;font-weight:700;color:#6b7280;background:#f0f6ff}
+.day-box.highlight{background:#fef3c7;border-color:#f59e0b;color:#92400e}
+.day-box.today{background:#dbeafe;border-color:#1a5fa8;color:#1e40af}
+.day-box.answer-day{background:#d1fae5;border-color:#10b981;color:#065f46}
+.progress{height:7px;background:#e2ecf8;border-radius:4px;margin-bottom:14px;overflow:hidden}
+.progress-fill{height:100%;background:#1a5fa8;border-radius:4px;transition:width .3s}
+.done-card{text-align:center;padding:32px 24px;background:#fff;border:1.5px solid #d1e3f8;border-radius:16px;box-shadow:0 2px 8px rgba(26,95,168,.07)}
+.done-emoji{font-size:52px;margin-bottom:12px}
+.done-title{font-size:20px;font-weight:700;color:#1e293b;margin-bottom:8px}
+.done-sub{font-size:14px;color:#6b7280;margin-bottom:20px}
+.restart-btn{padding:11px 28px;background:#1a5fa8;color:#fff;border:none;border-radius:20px;font-size:14px;font-weight:700;cursor:pointer}
+.clock-wrap{display:flex;justify-content:center;margin-bottom:14px}
+.game-wrap{max-width:620px;margin:0 auto}
+</style>
+</head>
+<body>
+<div class="game-wrap">
+  <h1>🕐 Học Thời Gian – Lớp 1</h1>
+  <p class="subtitle">Luyện tập: thứ trong tuần · tính ngày · xem đồng hồ</p>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('days')">📅 Thứ trong tuần</button>
+    <button class="tab" onclick="switchTab('date')">🗓️ Tính ngày</button>
+    <button class="tab" onclick="switchTab('clock')">🕐 Xem giờ</button>
+  </div>
+
+  <div class="panel active" id="panel-days">
+    <div class="score-bar">
+      <span class="score-pill" id="score-days">⭐ 0 / 0</span>
+      <span style="font-size:13px;color:#6b7280" id="q-num-days">Câu 1 / 8</span>
+    </div>
+    <div class="progress"><div class="progress-fill" id="prog-days" style="width:0%"></div></div>
+    <div id="days-content"></div>
+  </div>
+
+  <div class="panel" id="panel-date">
+    <div class="score-bar">
+      <span class="score-pill" id="score-date">⭐ 0 / 0</span>
+      <span style="font-size:13px;color:#6b7280" id="q-num-date">Câu 1 / 6</span>
+    </div>
+    <div class="progress"><div class="progress-fill" id="prog-date" style="width:0%"></div></div>
+    <div id="date-content"></div>
+  </div>
+
+  <div class="panel" id="panel-clock">
+    <div class="score-bar">
+      <span class="score-pill" id="score-clock">⭐ 0 / 0</span>
+      <span style="font-size:13px;color:#6b7280" id="q-num-clock">Câu 1 / 6</span>
+    </div>
+    <div class="progress"><div class="progress-fill" id="prog-clock" style="width:0%"></div></div>
+    <div id="clock-content"></div>
+  </div>
+</div>
+
+<script>
+const DAYS=['Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy','Chủ Nhật'];
+const DAYS_SHORT=['T2','T3','T4','T5','T6','T7','CN'];
+function dayIdx(name){return DAYS.indexOf(name);}
+
+const daysQs=[
+  {q:'Hôm nay là <b>Thứ Hai</b>. Ngày mai là thứ mấy?',today:0,highlight:0,opts:['Thứ Ba','Chủ Nhật','Thứ Tư','Thứ Năm'],ans:'Thứ Ba',explain:'Sau Thứ Hai là Thứ Ba.'},
+  {q:'Ngày mai là <b>Chủ Nhật</b>. Hôm nay là thứ mấy?',today:5,highlight:6,opts:['Thứ Sáu','Thứ Bảy','Thứ Hai','Thứ Năm'],ans:'Thứ Bảy',explain:'Trước Chủ Nhật là Thứ Bảy.'},
+  {q:'Hôm qua là <b>Thứ Tư</b>. Hôm nay là thứ mấy?',today:3,highlight:2,opts:['Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu'],ans:'Thứ Năm',explain:'Sau Thứ Tư là Thứ Năm.'},
+  {q:'Hôm nay là <b>Thứ Sáu</b>. Ngày kia (2 ngày sau) là thứ mấy?',today:4,highlight:4,opts:['Thứ Bảy','Chủ Nhật','Thứ Hai','Thứ Năm'],ans:'Chủ Nhật',explain:'Thứ Sáu → Thứ Bảy → Chủ Nhật. Ngày kia là Chủ Nhật.'},
+  {q:'Hôm nay là <b>Thứ Ba</b>. Hôm qua là thứ mấy?',today:1,highlight:1,opts:['Thứ Hai','Thứ Tư','Thứ Ba','Thứ Năm'],ans:'Thứ Hai',explain:'Trước Thứ Ba là Thứ Hai.'},
+  {q:'Chủ Nhật tuần này An đi sinh nhật bạn. Hôm nay là <b>Thứ Tư</b>. Còn mấy ngày nữa đến sinh nhật?',today:2,highlight:6,opts:['3 ngày','4 ngày','5 ngày','2 ngày'],ans:'4 ngày',explain:'Thứ Tư → T5 → T6 → T7 → Chủ Nhật. Còn 4 ngày nữa.',noStrip:true},
+  {q:'Hôm nay là <b>Thứ Năm</b>. Ngày mai là thứ mấy?',today:3,highlight:3,opts:['Thứ Sáu','Thứ Bảy','Thứ Tư','Thứ Ba'],ans:'Thứ Sáu',explain:'Sau Thứ Năm là Thứ Sáu.'},
+  {q:'Ngày kia là <b>Thứ Hai</b>. Hôm nay là thứ mấy?',today:5,highlight:0,opts:['Thứ Bảy','Thứ Sáu','Chủ Nhật','Thứ Năm'],ans:'Thứ Bảy',explain:'Thứ Hai - 2 ngày = Thứ Bảy.'},
+];
+
+const dateQs=[
+  {q:'Hôm nay là <b>Thứ Ba, ngày 14 tháng 5</b>. Chủ Nhật là sinh nhật An. An sinh vào ngày nào?',opts:['Ngày 18 tháng 5','Ngày 19 tháng 5','Ngày 17 tháng 5','Ngày 20 tháng 5'],ans:'Ngày 19 tháng 5',explain:'T3(14) → T4(15) → T5(16) → T6(17) → T7(18) → CN(19). Sinh nhật An là ngày 19 tháng 5.',startDay:1,startDate:14,markDay:6},
+  {q:'Hôm nay là <b>Thứ Hai, ngày 6 tháng 3</b>. Thứ Sáu tuần này em đi dã ngoại. Em đi vào ngày mấy?',opts:['Ngày 10 tháng 3','Ngày 11 tháng 3','Ngày 9 tháng 3','Ngày 12 tháng 3'],ans:'Ngày 10 tháng 3',explain:'T2(6) → T3(7) → T4(8) → T5(9) → T6(10). Đi dã ngoại ngày 10 tháng 3.',startDay:0,startDate:6,markDay:4},
+  {q:'Sinh nhật Bình là <b>ngày 20 tháng 4</b>. Hôm nay là <b>ngày 17 tháng 4</b>. Còn mấy ngày nữa đến sinh nhật Bình?',opts:['3 ngày','2 ngày','4 ngày','1 ngày'],ans:'3 ngày',explain:'17 → 18 → 19 → 20. Còn đúng 3 ngày nữa.',noStrip:true},
+  {q:'Hôm nay là <b>Thứ Tư, ngày 22 tháng 9</b>. Thứ Bảy Minh có buổi biểu diễn văn nghệ. Buổi biểu diễn là ngày mấy?',opts:['Ngày 25 tháng 9','Ngày 24 tháng 9','Ngày 26 tháng 9','Ngày 23 tháng 9'],ans:'Ngày 25 tháng 9',explain:'T4(22) → T5(23) → T6(24) → T7(25). Biểu diễn ngày 25 tháng 9.',startDay:2,startDate:22,markDay:5},
+  {q:'Hôm nay là <b>Thứ Sáu, ngày 1 tháng 6</b>. Chủ Nhật tuần này cả nhà đi biển. Đi vào ngày nào?',opts:['Ngày 3 tháng 6','Ngày 2 tháng 6','Ngày 4 tháng 6','Ngày 5 tháng 6'],ans:'Ngày 3 tháng 6',explain:'T6(1) → T7(2) → CN(3). Đi biển ngày 3 tháng 6.',startDay:4,startDate:1,markDay:6},
+  {q:'Thứ Hai tuần tới lớp Lan kiểm tra Toán. Hôm nay là <b>Thứ Năm, ngày 10</b>. Còn mấy ngày nữa?',opts:['4 ngày','5 ngày','3 ngày','6 ngày'],ans:'4 ngày',explain:'T5(10) → T6(11) → T7(12) → CN(13) → T2(14). Còn 4 ngày nữa.',noStrip:true},
+];
+
+function makeClock(h,m,size=140){
+  const cx=size/2,cy=size/2,r=size/2-4;
+  const hAngle=((h%12)+m/60)*30-90;
+  const mAngle=m*6-90;
+  const hx=cx+(r*0.5)*Math.cos(hAngle*Math.PI/180);
+  const hy=cy+(r*0.5)*Math.sin(hAngle*Math.PI/180);
+  const mx=cx+(r*0.72)*Math.cos(mAngle*Math.PI/180);
+  const my=cy+(r*0.72)*Math.sin(mAngle*Math.PI/180);
+  let ticks='';
+  for(let i=0;i<12;i++){
+    const a=(i*30-90)*Math.PI/180;
+    const x1=cx+(r-2)*Math.cos(a),y1=cy+(r-2)*Math.sin(a);
+    const x2=cx+(r-8)*Math.cos(a),y2=cy+(r-8)*Math.sin(a);
+    ticks+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#94a3b8" stroke-width="1.5"/>`;
+  }
+  const nums=[12,1,2,3,4,5,6,7,8,9,10,11];
+  let labels='';
+  nums.forEach((n,i)=>{
+    const a=(i*30-90)*Math.PI/180;
+    const nx=cx+(r-18)*Math.cos(a),ny=cy+(r-18)*Math.sin(a);
+    labels+=`<text x="${nx.toFixed(1)}" y="${(ny+4).toFixed(1)}" text-anchor="middle" font-size="9" font-weight="700" fill="#64748b">${n}</text>`;
+  });
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg" class="clock-svg">
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="#f0f6ff" stroke="#c7d9f0" stroke-width="2"/>
+    ${ticks}${labels}
+    <line x1="${cx}" y1="${cy}" x2="${hx.toFixed(1)}" y2="${hy.toFixed(1)}" stroke="#1a5fa8" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="${cx}" y1="${cy}" x2="${mx.toFixed(1)}" y2="${my.toFixed(1)}" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="${cx}" cy="${cy}" r="3.5" fill="#1e293b"/>
+  </svg>`;
+}
+
+const clockQs=[
+  {q:'Đồng hồ đang chỉ mấy giờ?',h:8,m:0,opts:['8 giờ','7 giờ','9 giờ','10 giờ'],ans:'8 giờ',explain:'Kim ngắn (xanh) chỉ số 8, kim dài (đỏ) chỉ số 12. Đây là 8 giờ đúng.'},
+  {q:'An học Toán <b>2 tiếng</b>. An kết thúc lúc <b>10 giờ</b>. Hỏi An bắt đầu học lúc mấy giờ?',h:10,m:0,opts:['8 giờ','9 giờ','7 giờ','11 giờ'],ans:'8 giờ',explain:'Kết thúc 10 giờ, học 2 tiếng → bắt đầu lúc 10 - 2 = 8 giờ.',subtext:'Kết thúc lúc này 👆 Bắt đầu lúc mấy giờ?'},
+  {q:'Đồng hồ đang chỉ mấy giờ?',h:3,m:30,opts:['3 giờ rưỡi','4 giờ','3 giờ','2 giờ rưỡi'],ans:'3 giờ rưỡi',explain:'Kim ngắn ở giữa số 3 và 4, kim dài chỉ số 6 (= 30 phút). Đây là 3 giờ rưỡi.'},
+  {q:'Nam chơi đá bóng <b>1 tiếng</b>, bắt đầu lúc <b>4 giờ</b>. Nam kết thúc lúc mấy giờ?',h:4,m:0,opts:['5 giờ','6 giờ','3 giờ','4 giờ rưỡi'],ans:'5 giờ',explain:'Bắt đầu 4 giờ + 1 tiếng = kết thúc lúc 5 giờ.',subtext:'Bắt đầu lúc này 👆 Kết thúc lúc mấy giờ?'},
+  {q:'Đồng hồ đang chỉ mấy giờ?',h:6,m:0,opts:['6 giờ','12 giờ','7 giờ','5 giờ'],ans:'6 giờ',explain:'Kim ngắn chỉ số 6, kim dài chỉ số 12. Đây là 6 giờ đúng.'},
+  {q:'Mai học vẽ <b>1 tiếng rưỡi</b>, kết thúc lúc <b>11 giờ rưỡi</b>. Mai bắt đầu học lúc mấy giờ?',h:11,m:30,opts:['10 giờ','10 giờ rưỡi','9 giờ rưỡi','11 giờ'],ans:'10 giờ',explain:'Kết thúc 11 giờ rưỡi - 1 tiếng rưỡi = 10 giờ đúng.',subtext:'Kết thúc lúc này 👆 Bắt đầu lúc mấy giờ?'},
+];
+
+const state={
+  days:{q:0,score:0,total:0},
+  date:{q:0,score:0,total:0},
+  clock:{q:0,score:0,total:0},
+};
+
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    const names=['days','date','clock'];
+    t.classList.toggle('active',names[i]===name);
+  });
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+}
+
+function shuffle(arr){return [...arr].sort(()=>Math.random()-.5);}
+
+function renderWeekStrip(todayIdx,highlightIdx,answerIdx){
+  return '<div class="week-strip">'+DAYS_SHORT.map((d,i)=>{
+    let cls='day-box';
+    if(i===answerIdx) cls+=' answer-day';
+    else if(i===highlightIdx) cls+=' highlight';
+    else if(i===todayIdx) cls+=' today';
+    return `<div class="${cls}">${d}</div>`;
+  }).join('')+'</div>';
+}
+
+function renderDaysQ(){
+  const s=state.days;
+  if(s.q>=daysQs.length){renderDone('days');return;}
+  const q=daysQs[s.q];
+  const shuffled=shuffle(q.opts);
+  let strip=!q.noStrip?renderWeekStrip(q.today,q.highlight,-1):'';
+  document.getElementById('days-content').innerHTML=`
+    <div class="question-card">
+      ${strip}
+      <div class="qtext">${q.q}</div>
+      <div class="options" id="opts-days">
+        ${shuffled.map(o=>`<button class="opt" onclick="checkDays('${o}')">${o}</button>`).join('')}
+      </div>
+      <div class="feedback" id="fb-days"></div>
+      <button class="next-btn" id="next-days" onclick="nextDays()">Câu tiếp theo →</button>
+    </div>`;
+  updateMeta('days');
+}
+
+function checkDays(chosen){
+  const s=state.days;const q=daysQs[s.q];
+  const ok=chosen===q.ans;
+  s.total++;if(ok)s.score++;
+  document.querySelectorAll('#opts-days .opt').forEach(b=>{
+    b.classList.add('disabled');
+    if(b.textContent===q.ans)b.classList.add('correct');
+    else if(b.textContent===chosen&&!ok)b.classList.add('wrong');
+  });
+  if(!q.noStrip){
+    const strip=renderWeekStrip(q.today,q.highlight,dayIdx(q.ans));
+    const card=document.querySelector('#panel-days .question-card');
+    const existing=card.querySelector('.week-strip');
+    if(existing)existing.outerHTML=strip;
+    else card.insertAdjacentHTML('afterbegin',strip);
+  }
+  const fb=document.getElementById('fb-days');
+  fb.className='feedback show '+(ok?'ok':'no');
+  fb.innerHTML=(ok?'✓ Đúng rồi! ':'✗ Chưa đúng. ')+q.explain;
+  document.getElementById('next-days').classList.add('show');
+  updateMeta('days');
+}
+
+function nextDays(){state.days.q++;renderDaysQ();}
+
+function renderDateQ(){
+  const s=state.date;
+  if(s.q>=dateQs.length){renderDone('date');return;}
+  const q=dateQs[s.q];
+  const shuffled=shuffle(q.opts);
+  let strip='';
+  if(q.startDay!==undefined){
+    const days=[];
+    for(let i=0;i<7;i++){
+      const di=(q.startDay+i)%7;
+      const date=q.startDate+i;
+      const isToday=i===0,isMark=di===q.markDay;
+      let cls='day-box';
+      if(isMark)cls+=' highlight';
+      if(isToday)cls+=' today';
+      days.push(`<div class="${cls}">${DAYS_SHORT[di]}<br><span style="font-size:11px">${date}</span></div>`);
+    }
+    strip='<div class="week-strip">'+days.join('')+'</div>';
+  }
+  document.getElementById('date-content').innerHTML=`
+    <div class="question-card">
+      ${strip}
+      <div class="qtext">${q.q}</div>
+      <div class="options" id="opts-date">
+        ${shuffled.map(o=>`<button class="opt" onclick="checkDate('${o}')">${o}</button>`).join('')}
+      </div>
+      <div class="feedback" id="fb-date"></div>
+      <button class="next-btn" id="next-date" onclick="nextDate()">Câu tiếp theo →</button>
+    </div>`;
+  updateMeta('date');
+}
+
+function checkDate(chosen){
+  const s=state.date;const q=dateQs[s.q];
+  const ok=chosen===q.ans;
+  s.total++;if(ok)s.score++;
+  document.querySelectorAll('#opts-date .opt').forEach(b=>{
+    b.classList.add('disabled');
+    if(b.textContent===q.ans)b.classList.add('correct');
+    else if(b.textContent===chosen&&!ok)b.classList.add('wrong');
+  });
+  const fb=document.getElementById('fb-date');
+  fb.className='feedback show '+(ok?'ok':'no');
+  fb.innerHTML=(ok?'✓ Đúng rồi! ':'✗ Chưa đúng. ')+q.explain;
+  document.getElementById('next-date').classList.add('show');
+  updateMeta('date');
+}
+
+function nextDate(){state.date.q++;renderDateQ();}
+
+function renderClockQ(){
+  const s=state.clock;
+  if(s.q>=clockQs.length){renderDone('clock');return;}
+  const q=clockQs[s.q];
+  const shuffled=shuffle(q.opts);
+  const clockSvg=makeClock(q.h,q.m,140);
+  document.getElementById('clock-content').innerHTML=`
+    <div class="question-card">
+      <div class="clock-wrap">${clockSvg}</div>
+      ${q.subtext?`<div class="qhint">${q.subtext}</div>`:''}
+      <div class="qtext">${q.q}</div>
+      <div class="options" id="opts-clock">
+        ${shuffled.map(o=>`<button class="opt" onclick="checkClock('${o}')">${o}</button>`).join('')}
+      </div>
+      <div class="feedback" id="fb-clock"></div>
+      <button class="next-btn" id="next-clock" onclick="nextClock()">Câu tiếp theo →</button>
+    </div>`;
+  updateMeta('clock');
+}
+
+function checkClock(chosen){
+  const s=state.clock;const q=clockQs[s.q];
+  const ok=chosen===q.ans;
+  s.total++;if(ok)s.score++;
+  document.querySelectorAll('#opts-clock .opt').forEach(b=>{
+    b.classList.add('disabled');
+    if(b.textContent===q.ans)b.classList.add('correct');
+    else if(b.textContent===chosen&&!ok)b.classList.add('wrong');
+  });
+  const fb=document.getElementById('fb-clock');
+  fb.className='feedback show '+(ok?'ok':'no');
+  fb.innerHTML=(ok?'✓ Đúng rồi! ':'✗ Chưa đúng. ')+q.explain;
+  document.getElementById('next-clock').classList.add('show');
+  updateMeta('clock');
+}
+
+function nextClock(){state.clock.q++;renderClockQ();}
+
+function updateMeta(name){
+  const s=state[name];
+  const qs=name==='days'?daysQs:name==='date'?dateQs:clockQs;
+  document.getElementById('score-'+name).textContent='⭐ '+s.score+' / '+s.total;
+  document.getElementById('q-num-'+name).textContent='Câu '+(s.q+1)+' / '+qs.length;
+  document.getElementById('prog-'+name).style.width=(s.q/qs.length*100)+'%';
+}
+
+function renderDone(name){
+  const s=state[name];
+  const qs=name==='days'?daysQs:name==='date'?dateQs:clockQs;
+  const pct=Math.round(s.score/qs.length*100);
+  const msg=pct>=80?'Tuyệt vời! Con làm rất giỏi! 🎉':pct>=50?'Làm tốt lắm! Cố lên nhé! 💪':'Cần luyện thêm, con sẽ giỏi hơn! 📚';
+  document.getElementById(name+'-content').innerHTML=`
+    <div class="done-card">
+      <div class="done-emoji">${pct>=80?'🏆':pct>=50?'😊':'📖'}</div>
+      <div class="done-title">${msg}</div>
+      <div class="done-sub">Đúng ${s.score} / ${qs.length} câu (${pct}%)</div>
+      <button class="restart-btn" onclick="restart('${name}')">Chơi lại</button>
+    </div>`;
+  document.getElementById('prog-'+name).style.width='100%';
+}
+
+function restart(name){
+  state[name]={q:0,score:0,total:0};
+  if(name==='days')renderDaysQ();
+  else if(name==='date')renderDateQ();
+  else renderClockQ();
+  updateMeta(name);
+}
+
+renderDaysQ();renderDateQ();renderClockQ();
+</script>
+</body>
+</html>
