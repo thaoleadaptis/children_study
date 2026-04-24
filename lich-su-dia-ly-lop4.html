@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ôn Tập Lịch Sử & Địa Lý Lớp 4</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sky: #4FC3F7;
+    --ocean: #0277BD;
+    --deep: #01579B;
+    --sun: #FFD54F;
+    --sun-dark: #FF8F00;
+    --leaf: #66BB6A;
+    --leaf-dark: #388E3C;
+    --red: #EF5350;
+    --red-dark: #B71C1C;
+    --white: #FFFFFF;
+    --cloud: #F0F8FF;
+    --text: #1A237E;
+    --shadow: rgba(0,0,0,0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(160deg, #E3F2FD 0%, #B3E5FC 40%, #E8F5E9 100%);
+    min-height: 100vh;
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* Floating clouds background */
+  body::before {
+    content: '☁️☁️☁️';
+    position: fixed;
+    top: 20px;
+    left: -100px;
+    font-size: 60px;
+    opacity: 0.15;
+    animation: floatCloud 30s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @keyframes floatCloud {
+    from { transform: translateX(0); }
+    to { transform: translateX(110vw); }
+  }
+
+  .app {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 20px 16px 60px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 28px;
+    animation: dropIn 0.6s cubic-bezier(.34,1.56,.64,1) both;
+  }
+
+  @keyframes dropIn {
+    from { opacity:0; transform: translateY(-40px); }
+    to { opacity:1; transform: translateY(0); }
+  }
+
+  .header .flag {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 6px;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+  }
+
+  .header h1 {
+    font-family: 'Baloo 2', cursive;
+    font-size: clamp(22px, 5vw, 32px);
+    font-weight: 800;
+    color: var(--deep);
+    line-height: 1.2;
+    text-shadow: 0 2px 0 rgba(255,255,255,0.8);
+  }
+
+  .header p {
+    font-size: 14px;
+    color: var(--ocean);
+    font-weight: 600;
+    margin-top: 4px;
+  }
+
+  /* Score bar */
+  .scorebar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    border-radius: 20px;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 16px var(--shadow);
+    animation: dropIn 0.7s cubic-bezier(.34,1.56,.64,1) 0.1s both;
+  }
+
+  .score-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .score-item .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #90A4AE;
+  }
+
+  .score-item .value {
+    font-family: 'Baloo 2', cursive;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--deep);
+    line-height: 1;
+  }
+
+  .score-item .value.correct { color: var(--leaf-dark); }
+  .score-item .value.wrong { color: var(--red); }
+
+  /* Progress bar */
+  .progress-wrap {
+    background: #E3F2FD;
+    border-radius: 10px;
+    height: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.08);
+  }
+
+  .progress-bar {
+    height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--sky), var(--leaf));
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* Card */
+  .card {
+    background: white;
+    border-radius: 24px;
+    padding: 28px 24px;
+    box-shadow: 0 8px 32px var(--shadow);
+    margin-bottom: 20px;
+    animation: slideUp 0.4s cubic-bezier(.34,1.56,.64,1) both;
+  }
+
+  @keyframes slideUp {
+    from { opacity:0; transform: translateY(30px) scale(0.97); }
+    to { opacity:1; transform: translateY(0) scale(1); }
+  }
+
+  .question-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+
+  .q-badge {
+    background: linear-gradient(135deg, var(--sky), var(--ocean));
+    color: white;
+    font-family: 'Baloo 2', cursive;
+    font-weight: 800;
+    font-size: 13px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    letter-spacing: 0.03em;
+  }
+
+  .q-type {
+    font-size: 12px;
+    font-weight: 700;
+    color: #90A4AE;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .question-text {
+    font-family: 'Baloo 2', cursive;
+    font-size: clamp(16px, 3.5vw, 20px);
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.5;
+    margin-bottom: 22px;
+  }
+
+  /* Options */
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .opt-btn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--cloud);
+    border: 2.5px solid #BBDEFB;
+    border-radius: 16px;
+    padding: 13px 18px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.18s ease;
+    text-align: left;
+    width: 100%;
+  }
+
+  .opt-btn:hover:not(:disabled) {
+    background: #E3F2FD;
+    border-color: var(--sky);
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(79,195,247,0.2);
+  }
+
+  .opt-btn .opt-letter {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid #BBDEFB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Baloo 2', cursive;
+    font-weight: 800;
+    font-size: 15px;
+    color: var(--ocean);
+    transition: all 0.18s;
+  }
+
+  .opt-btn:disabled { cursor: default; }
+
+  .opt-btn.correct {
+    background: #E8F5E9;
+    border-color: var(--leaf);
+    color: var(--leaf-dark);
+    animation: popRight 0.4s cubic-bezier(.34,1.56,.64,1);
+  }
+
+  .opt-btn.correct .opt-letter {
+    background: var(--leaf);
+    border-color: var(--leaf);
+    color: white;
+  }
+
+  .opt-btn.wrong {
+    background: #FFEBEE;
+    border-color: var(--red);
+    color: var(--red-dark);
+    animation: shake 0.4s ease;
+  }
+
+  .opt-btn.wrong .opt-letter {
+    background: var(--red);
+    border-color: var(--red);
+    color: white;
+  }
+
+  @keyframes popRight {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03) translateX(4px); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+  }
+
+  /* Feedback */
+  .feedback {
+    display: none;
+    margin-top: 16px;
+    padding: 14px 18px;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 15px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+  .feedback.correct {
+    background: #E8F5E9;
+    border: 2px solid var(--leaf);
+    color: var(--leaf-dark);
+  }
+
+  .feedback.wrong {
+    background: #FFF3E0;
+    border: 2px solid #FFA726;
+    color: #E65100;
+  }
+
+  .feedback .emoji { font-size: 20px; margin-right: 6px; }
+
+  /* Essay answer */
+  .essay-answer {
+    background: #F1F8E9;
+    border: 2px solid var(--leaf);
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-top: 14px;
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .essay-answer .ans-label {
+    font-family: 'Baloo 2', cursive;
+    font-weight: 800;
+    font-size: 13px;
+    color: var(--leaf-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .essay-answer .ans-content {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #2E7D32;
+    white-space: pre-line;
+  }
+
+  /* Show answer button */
+  .show-ans-btn {
+    display: none;
+    margin-top: 14px;
+    background: linear-gradient(135deg, var(--sun), var(--sun-dark));
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 11px 22px;
+    font-family: 'Baloo 2', cursive;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.18s;
+    box-shadow: 0 4px 12px rgba(255,143,0,0.3);
+  }
+
+  .show-ans-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(255,143,0,0.35); }
+
+  /* Next button */
+  .next-btn {
+    display: none;
+    width: 100%;
+    margin-top: 16px;
+    background: linear-gradient(135deg, var(--ocean), var(--deep));
+    color: white;
+    border: none;
+    border-radius: 16px;
+    padding: 16px;
+    font-family: 'Baloo 2', cursive;
+    font-size: 18px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.18s;
+    box-shadow: 0 6px 20px rgba(1,87,155,0.3);
+    letter-spacing: 0.03em;
+  }
+
+  .next-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(1,87,155,0.4); }
+  .next-btn:active { transform: translateY(0); }
+
+  /* Results screen */
+  .results {
+    display: none;
+    text-align: center;
+    animation: slideUp 0.5s cubic-bezier(.34,1.56,.64,1) both;
+  }
+
+  .results-card {
+    background: white;
+    border-radius: 28px;
+    padding: 36px 28px;
+    box-shadow: 0 12px 40px var(--shadow);
+  }
+
+  .trophy { font-size: 80px; display: block; margin-bottom: 10px; animation: bounce 1s ease 0.3s both; }
+
+  @keyframes bounce {
+    0% { transform: scale(0) rotate(-15deg); }
+    70% { transform: scale(1.15) rotate(5deg); }
+    100% { transform: scale(1) rotate(0deg); }
+  }
+
+  .results-title {
+    font-family: 'Baloo 2', cursive;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--deep);
+    margin-bottom: 8px;
+  }
+
+  .results-score {
+    font-family: 'Baloo 2', cursive;
+    font-size: 56px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--ocean), var(--leaf-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin: 10px 0;
+  }
+
+  .results-msg {
+    font-size: 16px;
+    color: #546E7A;
+    font-weight: 600;
+    margin-bottom: 24px;
+  }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .res-stat {
+    background: var(--cloud);
+    border-radius: 16px;
+    padding: 14px;
+  }
+
+  .res-stat .s-val {
+    font-family: 'Baloo 2', cursive;
+    font-size: 28px;
+    font-weight: 800;
+  }
+
+  .res-stat .s-label { font-size: 13px; font-weight: 700; color: #78909C; }
+  .res-stat.green .s-val { color: var(--leaf-dark); }
+  .res-stat.red .s-val { color: var(--red); }
+
+  .restart-btn {
+    background: linear-gradient(135deg, var(--ocean), var(--deep));
+    color: white;
+    border: none;
+    border-radius: 18px;
+    padding: 18px 40px;
+    font-family: 'Baloo 2', cursive;
+    font-size: 20px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(1,87,155,0.35);
+    transition: all 0.18s;
+    display: inline-block;
+  }
+
+  .restart-btn:hover { transform: translateY(-3px) scale(1.02); }
+
+  /* Home / mode select */
+  .home {
+    animation: slideUp 0.5s cubic-bezier(.34,1.56,.64,1) both;
+  }
+
+  .mode-title {
+    font-family: 'Baloo 2', cursive;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--deep);
+    text-align: center;
+    margin-bottom: 16px;
+  }
+
+  .mode-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .mode-btn {
+    background: white;
+    border: 3px solid #BBDEFB;
+    border-radius: 20px;
+    padding: 20px 14px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    font-family: 'Baloo 2', cursive;
+    color: var(--text);
+  }
+
+  .mode-btn:hover { border-color: var(--ocean); transform: translateY(-4px); box-shadow: 0 8px 20px rgba(2,119,189,0.15); }
+  .mode-btn.selected { border-color: var(--ocean); background: #E3F2FD; }
+
+  .mode-btn .mode-icon { font-size: 36px; display: block; margin-bottom: 8px; }
+  .mode-btn .mode-name { font-size: 16px; font-weight: 800; display: block; }
+  .mode-btn .mode-desc { font-size: 12px; font-weight: 600; color: #78909C; display: block; margin-top: 3px; font-family: 'Nunito', sans-serif; }
+
+  .start-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--leaf), var(--leaf-dark));
+    color: white;
+    border: none;
+    border-radius: 18px;
+    padding: 18px;
+    font-family: 'Baloo 2', cursive;
+    font-size: 20px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(56,142,60,0.35);
+    transition: all 0.18s;
+    letter-spacing: 0.03em;
+  }
+
+  .start-btn:hover { transform: translateY(-3px) scale(1.01); }
+
+  /* Confetti */
+  .confetti-wrap {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 999;
+    overflow: hidden;
+  }
+
+  .confetti-piece {
+    position: absolute;
+    width: 10px; height: 10px;
+    border-radius: 2px;
+    animation: confettiFall linear forwards;
+  }
+
+  @keyframes confettiFall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  .match-pairs { display: flex; flex-direction: column; gap: 10px; }
+  .match-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 8px;
+    align-items: center;
+  }
+  .match-a, .match-b {
+    background: #F1F8E9;
+    border: 2px solid var(--leaf);
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--leaf-dark);
+    line-height: 1.4;
+  }
+  .match-arrow { font-size: 20px; text-align: center; }
+
+  .fill-blank {
+    background: #FFF8E1;
+    border: 2px solid var(--sun-dark);
+    border-radius: 14px;
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #5D4037;
+    line-height: 2;
+  }
+
+  .fill-blank strong {
+    background: var(--sun);
+    border-radius: 6px;
+    padding: 2px 8px;
+    color: #5D4037;
+  }
+
+  @media (max-width: 480px) {
+    .mode-grid { grid-template-columns: 1fr; }
+    .match-row { grid-template-columns: 1fr; }
+    .match-arrow { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <span class="flag">🇻🇳</span>
+    <h1>Ôn Tập Lịch Sử & Địa Lý</h1>
+    <p>📚 Lớp 4 – Cuối Học Kì II</p>
+  </div>
+
+  <!-- HOME / MODE SELECT -->
+  <div class="home" id="homeScreen">
+    <div class="card" style="padding:24px;">
+      <div class="mode-title">🎮 Chọn chế độ ôn tập</div>
+      <div class="mode-grid">
+        <div class="mode-btn selected" onclick="selectMode('all')" id="mode-all">
+          <span class="mode-icon">📝</span>
+          <span class="mode-name">Tất Cả</span>
+          <span class="mode-desc">25 câu hỏi</span>
+        </div>
+        <div class="mode-btn" onclick="selectMode('tracnghiem')" id="mode-tracnghiem">
+          <span class="mode-icon">🅰️</span>
+          <span class="mode-name">Trắc Nghiệm</span>
+          <span class="mode-desc">20 câu hỏi</span>
+        </div>
+        <div class="mode-btn" onclick="selectMode('tuluan')" id="mode-tuluan">
+          <span class="mode-icon">✍️</span>
+          <span class="mode-name">Tự Luận</span>
+          <span class="mode-desc">5 câu hỏi</span>
+        </div>
+        <div class="mode-btn" onclick="selectMode('random')" id="mode-random">
+          <span class="mode-icon">🎲</span>
+          <span class="mode-name">Ngẫu Nhiên</span>
+          <span class="mode-desc">10 câu bất kỳ</span>
+        </div>
+      </div>
+      <button class="start-btn" onclick="startGame()">🚀 Bắt đầu ôn tập!</button>
+    </div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="quizScreen" style="display:none;">
+    <div class="scorebar">
+      <div class="score-item">
+        <span class="label">Câu</span>
+        <span class="value" id="qNum">1</span>
+      </div>
+      <div class="score-item">
+        <span class="label">Đúng</span>
+        <span class="value correct" id="correctCount">0</span>
+      </div>
+      <div class="score-item">
+        <span class="label">Sai</span>
+        <span class="value wrong" id="wrongCount">0</span>
+      </div>
+      <div class="score-item">
+        <span class="label">Còn lại</span>
+        <span class="value" id="remaining">0</span>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-bar" id="progressBar" style="width:0%"></div>
+    </div>
+
+    <div class="card" id="questionCard">
+      <div class="question-meta">
+        <span class="q-badge" id="qBadge">Câu 1</span>
+        <span class="q-type" id="qType">Trắc nghiệm</span>
+      </div>
+      <div class="question-text" id="questionText"></div>
+      <div id="optionsArea"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="essay-answer" id="essayAnswer">
+        <div class="ans-label">✅ Đáp án gợi ý</div>
+        <div class="ans-content" id="essayContent"></div>
+      </div>
+      <button class="show-ans-btn" id="showAnsBtn" onclick="showEssayAnswer()">💡 Xem đáp án</button>
+      <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Câu tiếp theo →</button>
+    </div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div class="results" id="resultsScreen">
+    <div class="results-card">
+      <span class="trophy" id="trophyEmoji">🏆</span>
+      <div class="results-title" id="resultsTitle">Xuất sắc!</div>
+      <div class="results-score" id="resultsScore">0/0</div>
+      <div class="results-msg" id="resultsMsg"></div>
+      <div class="results-grid">
+        <div class="res-stat green">
+          <div class="s-val" id="finalCorrect">0</div>
+          <div class="s-label">✅ Câu đúng</div>
+        </div>
+        <div class="res-stat red">
+          <div class="s-val" id="finalWrong">0</div>
+          <div class="s-label">❌ Câu sai</div>
+        </div>
+      </div>
+      <button class="restart-btn" onclick="goHome()">🏠 Chơi lại</button>
+    </div>
+  </div>
+</div>
+
+<div class="confetti-wrap" id="confettiWrap"></div>
+
+<script>
+const ALL_QUESTIONS = [
+  // --- TRẮC NGHIỆM ---
+  {
+    type: 'tracnghiem',
+    q: 'Câu 1: Vùng đồng bằng Bắc Bộ có địa hình như thế nào?',
+    opts: ['Tương đối cao', 'Tương đối thấp', 'Tương đối bằng phẳng', 'Khấp khểnh'],
+    ans: 2
+  },
+  {
+    type: 'tracnghiem',
+    q: 'Câu 2: Dân cư sinh sống ở Đồng bằng Bắc Bộ chủ yếu là ai?',
+    opts: ['Chủ yếu là dân tộc Mông sinh sống', 'Chủ yếu là dân tộc Thái sinh sống', 'Chủ yếu là người Hoa sinh sống', 'Chủ yếu là dân tộc Kinh sinh sống'],
+    ans: 3
+  },
+  {
+    type: 'tracnghiem',
+    q: 'Câu 3: Vùng Tây Nguyên gồm các loại địa hình nào?',
+    opts: ['Cao nguyên xếp tầng', 'Hoang mạc', 'Cao nguyên bằng nhau', 'Sa mạc'],
+    ans: 0
+  },
+  {
+    type: 'tracnghiem',
+    q: 'Câu 4: Mỗi buôn làng ở Tây Nguyên có gì đặc biệt?',
+    opts: ['Một ngôi nhà chung', 'Nơi ở chung', 'Nơi sinh hoạt chung', 'Hai ngôi nhà chung'],
+    ans: 2
+  },
+  {
+    type: 'tracnghiem',
+    q: 'Câu 5: Nam Bộ bao gồm những vùng nào?',
+    opts: ['Tây Nguyên', 'Đông Nam Bộ và Bắc Bộ', 'Đông Nam Bộ và Tây Nguyên', 'Đông Nam Bộ và Tây Nam Bộ'],
+    ans: 3
+  },
+  {
+    type: 'tracnghiem',
+    q: 'Câu 6: Mùa khô ở Tây Nguyên thường xảy ra tình trạng gì?',
+    opts: ['Có bão', 'Thiếu nước nghiêm trọng', 'Có tuyết', 'Mưa nhiều'],
+    ans: 1
+  },
+  {
+    type: 'tracnghiem',
+    q: 'Câu 7: Sài Gòn được lấy tên Thành phố Hồ Chí Minh từ năm nào?',
+    opts: ['1975', '1976', '1977', '1978'],
+    ans: 1
+  },
+  {
+    type: 'tracnghiem',
+    q: 'Câu 8: Đồng bằng Bắc Bộ có hai hệ thống sông lớn là:',
+    opts: ['Sông Hồng và sông Cả', 'Sông Mê Kông và Sông Gianh', 'Sông Hồng và sông Mê Kông', 'Sông Hồng và sông Thái Bình'],
+    ans: 3
+  },
+  {
+    type: 'tracnghiem',
+    q: 'Câu 9: Vùng Trung du và miền núi Bắc Bộ có địa hình chủ yếu là gì?',
+    opts: ['Chủ yếu là sa mạc', 'Chủ yếu là đồng bằng', 'Chủ yếu là đồi núi', 'Chủ yếu là cao nguyên'],
+    ans: 2
+  },
+  {
+    type: 'tracnghiem',
+    q: 'Câu 10: Vùng Trung du và miền núi Bắc Bộ có mùa đông như thế nào?',
+    opts: ['Lạnh nhất cả nước', 'Lạnh vừa phải', 'Không lạnh lắm', 'Lạnh nhì cả nước'],
+    ans: 0
+  },
+  {
+    type: 'tracnghiem',
+    q: 'Câu 11: Đặc điểm dân cư vùng đồng bằng Bắc Bộ là gì?',
+    opts: ['Không tập trung nhiều', 'Đông nhất cả nước', 'Thưa thớt', 'Ít ỏi'],
+    ans: 1
+  },
+  {
+    type: 'tracnghiem',
+    q: 'Câu 12: Lễ rước cá ông bắt nguồn từ đâu?',
+    opts: ['Tục thờ cá Mập', 'Tục thờ loài cá', 'Tục thờ cá Voi Xanh', 'Tục thờ cá Voi'],
+    ans: 3
+  },
+  {
+    type: 'tracnghiem',
+    q: 'Câu 13: Nhà cổ Hội An được xây dựng vào khoảng thời gian nào?',
+    opts: ['Thế kỉ XVII đến XVI', 'Thế kỉ XVII đến XX', 'Thế kỉ XVII đến XIX', 'Thế kỉ XVII đến XXI'],
+    ans: 2
+  },
+  {
+    type: 'tracnghiem',
+    q: 'Câu 14: Cao nguyên Lâm Viên thuộc tỉnh nào?',
+    opts: ['Kon Tum', 'Lâm Đồng', 'Đắk Lắk', 'Đồng Nai'],
+    ans: 1
+  },
+  {
+    type: 'tracnghiem',
+    q: 'Câu 15: Lễ hội nào sau đây có ở Tây Nguyên?',
+    opts: ['Lễ hội Cồng chiêng', 'Lễ hội Khặp', 'Lễ hội Gội đầu', 'Chợ phiên'],
+    ans: 0
+  },
+  {
+    type: 'tracnghiem',
+    q: 'Câu 16: Năm 2005, UNESCO đã ghi danh Không gian văn hoá Cồng chiêng Tây Nguyên là gì?',
+    opts: ['Văn hóa', 'Âm nhạc nhân loại', 'Kiệt tác âm nhạc nhân loại', 'Kiệt tác truyền khẩu và phi vật thể nhân loại'],
+    ans: 3
+  },
+  {
+    type: 'tracnghiem',
+    q: 'Câu 17: Cây ăn quả nào sau đây được trồng nhiều ở vùng Nam Bộ?',
+    opts: ['Sầu riêng', 'Mơ', 'Lựu', 'Mận'],
+    ans: 0
+  },
+  {
+    type: 'tracnghiem',
+    q: 'Câu 18: Hoạt động sản xuất chính của người dân Nam Bộ là gì?',
+    opts: [
+      'Nông nghiệp, công nghiệp, đánh bắt và nuôi trồng thuỷ sản',
+      'Khai thác than đá, nuôi trồng thuỷ sản',
+      'Chăn nuôi tuần lộc, phát triển du lịch',
+      'Làm đồ gốm sứ, sản xuất công nghiệp'
+    ],
+    ans: 0
+  },
+  {
+    type: 'tracnghiem',
+    q: 'Câu 19: Năm 1397, Hà Nội có tên là gì?',
+    opts: ['Thăng Long', 'Đông Nam', 'Đông Đô', 'Đại Việt'],
+    ans: 2
+  },
+  {
+    type: 'tracnghiem',
+    q: 'Câu 20: Kinh thành Huế được xây dựng từ thời nhà nào?',
+    opts: ['Nhà Lý', 'Nhà Hậu Lê', 'Nhà Nguyễn', 'Nhà Vua Hùng'],
+    ans: 2
+  },
+  // --- TỰ LUẬN ---
+  {
+    type: 'tuluan',
+    q: 'Câu 1 (Tự luận): Nối thông tin về hoạt động kinh tế ở vùng Tây Nguyên.',
+    matchPairs: [
+      { a: 'Các cây công nghiệp', b: 'Được trồng nhiều ở Tây Nguyên là cà phê, hồ tiêu, cao su, chè,…' },
+      { a: 'Chăn nuôi trâu, bò', b: 'Được phát triển ở các tỉnh Gia Lai và Đắk Lắk' },
+      { a: 'Các nhà máy thủy điện', b: 'Được xây dựng trên các dòng sông: Krông Pô Kô, Đắk Krông, Đồng Nai,…' },
+    ],
+    ans: 'Cây công nghiệp → trồng cà phê, hồ tiêu, cao su, chè\nChăn nuôi trâu, bò → phát triển ở Gia Lai và Đắk Lắk\nNhà máy thủy điện → xây dựng trên sông Krông Pô Kô, Đắk Krông, Đồng Nai,…'
+  },
+  {
+    type: 'tuluan',
+    q: 'Câu 2 (Tự luận): Điền từ thích hợp vào chỗ chấm về hệ thống sông ngòi ở Nam Bộ.',
+    fillBlanks: 'Vùng Nam Bộ có hệ thống sông ngòi [___]. Sông ngòi là nguồn cung cấp nước, phù sa, [___] và là [___] của vùng.',
+    fillAnswers: ['dày đặc', 'thuỷ sản', 'đường giao thông quan trọng'],
+    ans: 'Vùng Nam Bộ có hệ thống sông ngòi dày đặc. Sông ngòi là nguồn cung cấp nước, phù sa, thuỷ sản và là đường giao thông quan trọng của vùng.'
+  },
+  {
+    type: 'tuluan',
+    q: 'Câu 3 (Tự luận): Vì sao Cố đô Huế thu hút nhiều khách du lịch?',
+    ans: '• Cố đô Huế chứa đựng nhiều giá trị lịch sử, văn hoá đặc sắc.\n• Có nhiều công trình kiến trúc cổ.\n• Con người Huế hiền hoà, mến khách.'
+  },
+  {
+    type: 'tuluan',
+    q: 'Câu 4 (Tự luận): Nêu đặc điểm một số hoạt động kinh tế chủ yếu ở Tây Nguyên.',
+    ans: 'Một số hoạt động kinh tế chủ yếu ở vùng Tây Nguyên:\n+ Trồng cây công nghiệp (cao su, cà phê, hồ tiêu, …).\n+ Xây dựng các nhà máy thủy điện.\n+ Chăn nuôi gia súc.'
+  },
+  {
+    type: 'tuluan',
+    q: 'Câu 5 (Tự luận): Nêu đặc điểm thiên nhiên ở vùng Đồng bằng Nam Bộ.',
+    ans: 'Đặc điểm thiên nhiên của đồng bằng Nam Bộ:\n- Địa hình: Chủ yếu là đồng bằng, thấp, tương đối bằng phẳng. Đồng bằng Sông Cửu Long có nhiều vùng trũng dễ ngập nước.\n- Khí hậu: Nhiệt độ cao, trung bình trên 27°C. Khí hậu chia thành 2 mùa rõ rệt: mùa mưa và mùa khô.\n- Sông ngòi: Dày đặc, là nguồn cung cấp nước, phù sa, thuỷ sản và là đường giao thông quan trọng.\n- Ba loại đất chính: đất xám, đất badan (thích hợp trồng cây công nghiệp), đất phù sa (phù hợp trồng lúa, rau, cây ăn quả).'
+  }
+];
+
+const LETTERS = ['A', 'B', 'C', 'D'];
+let mode = 'all';
+let questions = [];
+let current = 0;
+let correct = 0;
+let wrong = 0;
+let answered = false;
+
+function selectMode(m) {
+  mode = m;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('mode-' + m).classList.add('selected');
+}
+
+function startGame() {
+  let pool = [...ALL_QUESTIONS];
+  if (mode === 'tracnghiem') pool = pool.filter(q => q.type === 'tracnghiem');
+  else if (mode === 'tuluan') pool = pool.filter(q => q.type === 'tuluan');
+  else if (mode === 'random') {
+    pool = shuffle(pool).slice(0, 10);
+  }
+  questions = pool;
+  current = 0; correct = 0; wrong = 0;
+  document.getElementById('homeScreen').style.display = 'none';
+  document.getElementById('resultsScreen').style.display = 'none';
+  document.getElementById('quizScreen').style.display = 'block';
+  updateScorebar();
+  renderQuestion();
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function updateScorebar() {
+  document.getElementById('qNum').textContent = current + 1;
+  document.getElementById('correctCount').textContent = correct;
+  document.getElementById('wrongCount').textContent = wrong;
+  document.getElementById('remaining').textContent = questions.length - current;
+  const pct = (current / questions.length) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('qBadge').textContent = `Câu ${current + 1}/${questions.length}`;
+}
+
+function renderQuestion() {
+  answered = false;
+  const q = questions[current];
+  document.getElementById('questionCard').style.animation = 'none';
+  setTimeout(() => { document.getElementById('questionCard').style.animation = 'slideUp 0.4s cubic-bezier(.34,1.56,.64,1) both'; }, 10);
+
+  document.getElementById('questionText').textContent = q.q;
+  document.getElementById('qType').textContent = q.type === 'tracnghiem' ? '🔤 Trắc nghiệm' : '✍️ Tự luận';
+  document.getElementById('feedback').style.display = 'none';
+  document.getElementById('essayAnswer').style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('showAnsBtn').style.display = 'none';
+
+  const area = document.getElementById('optionsArea');
+  area.innerHTML = '';
+
+  if (q.type === 'tracnghiem') {
+    const opts = document.createElement('div');
+    opts.className = 'options';
+    q.opts.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn';
+      btn.innerHTML = `<span class="opt-letter">${LETTERS[i]}</span><span>${opt}</span>`;
+      btn.onclick = () => handleAnswer(i);
+      opts.appendChild(btn);
+    });
+    area.appendChild(opts);
+  } else if (q.matchPairs) {
+    // Show match pairs
+    const wrap = document.createElement('div');
+    wrap.className = 'match-pairs';
+    q.matchPairs.forEach(pair => {
+      const row = document.createElement('div');
+      row.className = 'match-row';
+      row.innerHTML = `<div class="match-a">${pair.a}</div><div class="match-arrow">→</div><div class="match-b" style="filter:blur(6px);transition:filter 0.3s">${pair.b}</div>`;
+      wrap.appendChild(row);
+    });
+    area.appendChild(wrap);
+    const hint = document.createElement('p');
+    hint.style.cssText = 'font-size:13px;color:#90A4AE;text-align:center;margin-top:10px;font-weight:600;';
+    hint.textContent = '💡 Nhấn "Xem đáp án" để kiểm tra';
+    area.appendChild(hint);
+    document.getElementById('showAnsBtn').style.display = 'block';
+    document.getElementById('essayContent').textContent = q.ans;
+  } else if (q.fillBlanks) {
+    const div = document.createElement('div');
+    div.className = 'fill-blank';
+    let text = q.fillBlanks;
+    q.fillAnswers.forEach(ans => {
+      text = text.replace('[___]', `<strong style="filter:blur(5px);transition:filter 0.3s" class="fill-hidden">${ans}</strong>`);
+    });
+    div.innerHTML = text;
+    area.appendChild(div);
+    const hint = document.createElement('p');
+    hint.style.cssText = 'font-size:13px;color:#90A4AE;text-align:center;margin-top:10px;font-weight:600;';
+    hint.textContent = '💡 Nhấn "Xem đáp án" để xem từ cần điền';
+    area.appendChild(hint);
+    document.getElementById('showAnsBtn').style.display = 'block';
+    document.getElementById('essayContent').textContent = q.ans;
+  } else {
+    // Plain essay
+    const hint = document.createElement('p');
+    hint.style.cssText = 'font-size:14px;color:#90A4AE;text-align:center;font-weight:600;padding:20px 0;';
+    hint.innerHTML = '🤔 Hãy suy nghĩ câu trả lời, rồi xem đáp án!';
+    area.appendChild(hint);
+    document.getElementById('showAnsBtn').style.display = 'block';
+    document.getElementById('essayContent').textContent = q.ans;
+  }
+}
+
+function handleAnswer(chosen) {
+  if (answered) return;
+  answered = true;
+  const q = questions[current];
+  const btns = document.querySelectorAll('.opt-btn');
+
+  btns.forEach(b => b.disabled = true);
+
+  const isCorrect = chosen === q.ans;
+  btns[chosen].classList.add(isCorrect ? 'correct' : 'wrong');
+
+  if (!isCorrect) {
+    btns[q.ans].classList.add('correct');
+    wrong++;
+  } else {
+    correct++;
+    spawnConfetti(5);
+  }
+
+  const fb = document.getElementById('feedback');
+  fb.style.display = 'block';
+  if (isCorrect) {
+    fb.className = 'feedback correct';
+    fb.innerHTML = '<span class="emoji">🌟</span> Chính xác! Giỏi lắm!';
+  } else {
+    fb.className = 'feedback wrong';
+    fb.innerHTML = `<span class="emoji">💪</span> Chưa đúng rồi! Đáp án đúng là <strong>${LETTERS[q.ans]}. ${q.opts[q.ans]}</strong>`;
+  }
+
+  updateScorebar();
+  document.getElementById('nextBtn').style.display = 'block';
+  document.getElementById('nextBtn').textContent = current < questions.length - 1 ? 'Câu tiếp theo →' : '🏁 Xem kết quả';
+}
+
+function showEssayAnswer() {
+  const q = questions[current];
+  document.getElementById('essayAnswer').style.display = 'block';
+  document.getElementById('showAnsBtn').style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'block';
+  document.getElementById('nextBtn').textContent = current < questions.length - 1 ? 'Câu tiếp theo →' : '🏁 Xem kết quả';
+
+  // Unblur match pairs
+  document.querySelectorAll('.match-b, .fill-hidden').forEach(el => {
+    el.style.filter = 'none';
+  });
+
+  correct++; // give benefit of the doubt for self-check
+  updateScorebar();
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= questions.length) {
+    showResults();
+  } else {
+    updateScorebar();
+    renderQuestion();
+  }
+}
+
+function showResults() {
+  document.getElementById('quizScreen').style.display = 'none';
+  const r = document.getElementById('resultsScreen');
+  r.style.display = 'block';
+
+  const total = questions.length;
+  const pct = Math.round((correct / total) * 100);
+
+  document.getElementById('resultsScore').textContent = `${correct}/${total}`;
+  document.getElementById('finalCorrect').textContent = correct;
+  document.getElementById('finalWrong').textContent = wrong;
+
+  let trophy, title, msg;
+  if (pct >= 90) { trophy = '🏆'; title = 'Xuất sắc!'; msg = 'Em học rất giỏi! Cô/thầy tự hào về em! 🌟'; }
+  else if (pct >= 70) { trophy = '🥈'; title = 'Giỏi lắm!'; msg = 'Em làm rất tốt! Cố gắng thêm một chút nhé! 💪'; }
+  else if (pct >= 50) { trophy = '🥉'; title = 'Cố lên!'; msg = 'Em cần ôn thêm một chút! Em có thể làm được! 📚'; }
+  else { trophy = '📖'; title = 'Ôn thêm nhé!'; msg = 'Đừng nản lòng, ôn tập lại và thử lại nhé! 🌈'; }
+
+  document.getElementById('trophyEmoji').textContent = trophy;
+  document.getElementById('resultsTitle').textContent = title;
+  document.getElementById('resultsMsg').textContent = msg;
+
+  if (pct >= 70) spawnConfetti(40);
+}
+
+function goHome() {
+  document.getElementById('resultsScreen').style.display = 'none';
+  document.getElementById('homeScreen').style.display = 'block';
+  current = 0; correct = 0; wrong = 0;
+}
+
+function spawnConfetti(count) {
+  const wrap = document.getElementById('confettiWrap');
+  const colors = ['#4FC3F7','#FFD54F','#66BB6A','#EF5350','#AB47BC','#FF8A65'];
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.cssText = `
+      left: ${Math.random() * 100}vw;
+      top: -20px;
+      background: ${colors[Math.floor(Math.random()*colors.length)]};
+      width: ${6 + Math.random()*8}px;
+      height: ${6 + Math.random()*8}px;
+      border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+      animation-duration: ${1.5 + Math.random()*2}s;
+      animation-delay: ${Math.random()*0.5}s;
+    `;
+    wrap.appendChild(el);
+    el.addEventListener('animationend', () => el.remove());
+  }
+}
+</script>
+</body>
+</html>
