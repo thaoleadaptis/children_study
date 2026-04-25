@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔧 Grammar Doctor - Fix the Sentence!</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Quicksand:wght@400;600;700&display=swap');
+
+  :root {
+    --bg1: #1a1a2e;
+    --bg2: #16213e;
+    --accent: #e94560;
+    --blue: #0f3460;
+    --gold: #f5a623;
+    --green: #00b09b;
+    --purple: #7c3aed;
+    --light: #eef2ff;
+    --card: #1e2a4a;
+    --glow: rgba(233, 69, 96, 0.3);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Quicksand', sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    min-height: 100vh;
+    color: var(--light);
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Animated space bg */
+  .stars-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .dot {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: pulse 3s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.5); }
+  }
+
+  .game-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 20px 0 15px;
+  }
+
+  .mascot {
+    font-size: 3em;
+    display: block;
+    margin-bottom: 5px;
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .game-title {
+    font-family: 'Baloo 2', cursive;
+    font-size: 2.2em;
+    font-weight: 800;
+    background: linear-gradient(90deg, #ff6b6b, var(--gold), #67e8a5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    letter-spacing: 1px;
+  }
+
+  .subtitle {
+    font-size: 0.95em;
+    color: #aaa;
+    margin-top: 5px;
+    font-weight: 600;
+  }
+
+  /* Stats */
+  .stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 15px 0;
+    flex-wrap: wrap;
+  }
+
+  .stat-pill {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 25px;
+    padding: 8px 18px;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1em;
+    font-weight: 700;
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Progress */
+  .prog-bar {
+    height: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    margin: 10px 0 20px;
+    overflow: hidden;
+  }
+  .prog-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--green), var(--gold));
+    border-radius: 10px;
+    transition: width 0.5s ease;
+    box-shadow: 0 0 10px rgba(0, 176, 155, 0.5);
+  }
+
+  /* Question card */
+  .q-card {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    animation: cardIn 0.5s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .q-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--gold), var(--green), var(--purple));
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(-15px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .grammar-topic {
+    display: inline-block;
+    background: rgba(233, 69, 96, 0.2);
+    border: 1px solid var(--accent);
+    color: #ff8fa3;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: 700;
+    margin-bottom: 15px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .q-label {
+    color: #aaa;
+    font-size: 0.85em;
+    font-weight: 600;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .sentence-display {
+    font-size: 1.4em;
+    font-weight: 700;
+    color: white;
+    line-height: 1.5;
+    margin: 10px 0 20px;
+    padding: 15px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    border-left: 4px solid var(--gold);
+  }
+
+  .error-word {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-style: wavy;
+    text-underline-offset: 4px;
+  }
+
+  .options-label {
+    color: #aaa;
+    font-size: 0.85em;
+    font-weight: 600;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .opt-btn {
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 16px 12px;
+    color: white;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.15em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .opt-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent, rgba(255,255,255,0.05));
+  }
+
+  .opt-btn:hover:not(:disabled) {
+    background: rgba(255,255,255,0.12);
+    border-color: var(--gold);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(245, 166, 35, 0.2);
+    color: var(--gold);
+  }
+
+  .opt-btn.correct-pick {
+    background: rgba(0, 176, 155, 0.2);
+    border-color: var(--green);
+    color: #67e8a5;
+    animation: correctGlow 0.5s ease;
+  }
+
+  .opt-btn.wrong-pick {
+    background: rgba(233, 69, 96, 0.2);
+    border-color: var(--accent);
+    color: #ff8fa3;
+    animation: wrongShake 0.4s ease;
+  }
+
+  @keyframes correctGlow {
+    0%, 100% { box-shadow: 0 0 0 rgba(0,176,155,0); }
+    50% { box-shadow: 0 0 25px rgba(0,176,155,0.6); }
+  }
+  @keyframes wrongShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+
+  /* Rule box */
+  .rule-box {
+    margin-top: 15px;
+    padding: 14px;
+    background: rgba(124, 58, 237, 0.15);
+    border: 1px solid rgba(124, 58, 237, 0.4);
+    border-radius: 12px;
+    font-size: 0.9em;
+    color: #c4b5fd;
+    display: none;
+    animation: fadeIn 0.4s ease;
+    line-height: 1.6;
+  }
+  .rule-box.show { display: block; }
+  .rule-icon { font-size: 1.1em; margin-right: 4px; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Correct sentence display */
+  .correct-sentence {
+    margin-top: 10px;
+    padding: 12px;
+    background: rgba(0, 176, 155, 0.1);
+    border: 1px solid rgba(0, 176, 155, 0.3);
+    border-radius: 10px;
+    font-size: 0.95em;
+    color: #67e8a5;
+    display: none;
+    font-weight: 600;
+  }
+  .correct-sentence.show { display: block; }
+
+  .next-btn {
+    display: none;
+    background: linear-gradient(135deg, var(--accent), #ff6b9d);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 13px 35px;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.2em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 15px;
+    box-shadow: 0 6px 20px rgba(233, 69, 96, 0.4);
+    letter-spacing: 0.5px;
+  }
+  .next-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(233, 69, 96, 0.5); }
+  .next-btn.show { display: block; }
+
+  /* Result */
+  .result-screen {
+    display: none;
+    text-align: center;
+    background: var(--card);
+    border-radius: 20px;
+    padding: 40px 30px;
+    border: 1px solid rgba(255,255,255,0.1);
+    animation: cardIn 0.5s ease;
+  }
+  .result-screen.show { display: block; }
+
+  .result-big { font-size: 4em; margin-bottom: 10px; }
+  .result-heading {
+    font-family: 'Baloo 2', cursive;
+    font-size: 2em;
+    font-weight: 800;
+    background: linear-gradient(90deg, var(--gold), var(--green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+  .result-msg { color: #aaa; font-size: 1em; margin-bottom: 20px; }
+
+  .grammar-summary {
+    background: rgba(255,255,255,0.05);
+    border-radius: 14px;
+    padding: 15px;
+    margin: 15px 0;
+    text-align: left;
+  }
+  .grammar-summary h3 {
+    font-family: 'Baloo 2', cursive;
+    font-size: 1em;
+    color: var(--gold);
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  .rule-item {
+    font-size: 0.85em;
+    color: #bbb;
+    margin: 5px 0;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    line-height: 1.5;
+  }
+  .rule-item:last-child { border-bottom: none; }
+  .rule-item strong { color: #c4b5fd; }
+
+  .play-again-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 13px 35px;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.2em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  }
+  .play-again-btn:hover { transform: translateY(-3px); }
+
+  /* Explosion particles */
+  .particle {
+    position: fixed;
+    pointer-events: none;
+    border-radius: 50%;
+    animation: explode ease-out forwards;
+    z-index: 999;
+  }
+  @keyframes explode {
+    0% { transform: translate(0,0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stars-bg" id="starsBg"></div>
+
+<div class="game-wrap">
+  <div class="header">
+    <span class="mascot">🩺</span>
+    <div class="game-title">GRAMMAR DOCTOR</div>
+    <div class="subtitle">Find the mistake and choose the correct word! 💊</div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-pill">⭐ <span id="score">0</span> pts</div>
+    <div class="stat-pill">❤️ <span id="lives">3</span></div>
+    <div class="stat-pill">🩺 <span id="qnum">1</span> / <span id="qtotal">0</span></div>
+  </div>
+
+  <div class="prog-bar"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+
+  <div class="q-card" id="qCard">
+    <div class="grammar-topic" id="topicTag">Grammar Topic</div>
+    <div class="q-label">🚨 Find the mistake in the sentence:</div>
+    <div class="sentence-display" id="sentenceDisplay"></div>
+    <div class="options-label">✏️ Choose the correct word to replace the <span style="color:#ff6b6b">underlined word</span>:</div>
+    <div class="options-grid" id="optGrid"></div>
+    <div class="rule-box" id="ruleBox"></div>
+    <div class="correct-sentence" id="correctSentence"></div>
+    <button class="next-btn" id="nextBtn" onclick="nextQ()">Next Question ➡️</button>
+  </div>
+
+  <div class="result-screen" id="resultScreen">
+    <div class="result-big" id="resultBig">🏆</div>
+    <div class="result-heading" id="resultHeading">Fantastic!</div>
+    <div class="result-msg" id="resultMsg"></div>
+    <div class="grammar-summary">
+      <h3>📚 Grammar Rules You Practiced:</h3>
+      <div class="rule-item"><strong>a / an:</strong> Use "a" before consonants (a cat), "an" before vowels (an apple)</div>
+      <div class="rule-item"><strong>is / are:</strong> "is" for singular (The cat IS), "are" for plural (The cats ARE)</div>
+      <div class="rule-item"><strong>Singular / Plural:</strong> Add -s or -es for plural nouns (1 dog → 2 dogs)</div>
+      <div class="rule-item"><strong>Possessives:</strong> his, her, my, their match the person (She → her, He → his)</div>
+      <div class="rule-item"><strong>Present Continuous:</strong> am/is/are + verb-ing (She IS wearing, not she WEARING)</div>
+    </div>
+    <button class="play-again-btn" onclick="startGame()">🔄 Play Again!</button>
+  </div>
+</div>
+
+<script>
+// Generate star background
+const sb = document.getElementById('starsBg');
+for (let i = 0; i < 60; i++) {
+  const d = document.createElement('div');
+  d.className = 'dot';
+  const size = Math.random() * 3 + 1;
+  d.style.cssText = `width:${size}px;height:${size}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation-delay:${Math.random()*3}s;animation-duration:${2+Math.random()*3}s`;
+  sb.appendChild(d);
+}
+
+const ALL_QUESTIONS = [
+  { topic: "🍎 A or AN?", sentence: "She has <e>a</e> orange in her bag.", correct: "an", options: ["an", "a", "the", "some"], rule: "💡 Use AN before vowel sounds (a,e,i,o,u). Orange → O → AN orange!", correctSentence: "✅ She has AN orange in her bag." },
+  { topic: "🍎 A or AN?", sentence: "I want <e>an</e> cookie, please.", correct: "a", options: ["a", "an", "the", "some"], rule: "💡 Cookie starts with C (consonant) → A cookie!", correctSentence: "✅ I want A cookie, please." },
+  { topic: "🍎 A or AN?", sentence: "There is <e>a</e> elephant at the zoo.", correct: "an", options: ["an", "a", "some", "the"], rule: "💡 Elephant starts with E (vowel) → AN elephant!", correctSentence: "✅ There is AN elephant at the zoo." },
+  { topic: "🍎 A or AN?", sentence: "He eats <e>an</e> banana every day.", correct: "a", options: ["a", "an", "the", "some"], rule: "💡 Banana starts with B (consonant) → A banana!", correctSentence: "✅ He eats A banana every day." },
+  { topic: "🍎 A or AN?", sentence: "I see <e>a</e> ant on the floor.", correct: "an", options: ["an", "a", "the", "some"], rule: "💡 Ant starts with A (vowel) → AN ant!", correctSentence: "✅ I see AN ant on the floor." },
+  { topic: "🍎 A or AN?", sentence: "She draws <e>an</e> star in her book.", correct: "a", options: ["a", "an", "some", "the"], rule: "💡 Star starts with S (consonant) → A star!", correctSentence: "✅ She draws A star in her book." },
+  { topic: "🍎 A or AN?", sentence: "There is <e>a</e> umbrella by the door.", correct: "an", options: ["an", "a", "the", "some"], rule: "💡 Umbrella starts with U (vowel) → AN umbrella!", correctSentence: "✅ There is AN umbrella by the door." },
+  { topic: "🍎 A or AN?", sentence: "My dad has <e>an</e> car.", correct: "a", options: ["a", "an", "the", "some"], rule: "💡 Car starts with C (consonant) → A car!", correctSentence: "✅ My dad has A car." },
+  { topic: "🔤 IS or ARE?", sentence: "The cats <e>is</e> sleeping on the sofa.", correct: "are", options: ["are", "is", "was", "be"], rule: "💡 Cats = plural → ARE. Many cats ARE sleeping!", correctSentence: "✅ The cats ARE sleeping on the sofa." },
+  { topic: "🔤 IS or ARE?", sentence: "My brother <e>are</e> tall and funny.", correct: "is", options: ["is", "are", "am", "be"], rule: "💡 My brother = one person (singular) → IS!", correctSentence: "✅ My brother IS tall and funny." },
+  { topic: "🔤 IS or ARE?", sentence: "There <e>are</e> a dog in the garden.", correct: "is", options: ["is", "are", "be", "am"], rule: "💡 'A dog' = one dog → There IS a dog!", correctSentence: "✅ There IS a dog in the garden." },
+  { topic: "🔤 IS or ARE?", sentence: "My friends <e>is</e> very kind.", correct: "are", options: ["are", "is", "am", "be"], rule: "💡 Friends = plural → ARE. My friends ARE kind!", correctSentence: "✅ My friends ARE very kind." },
+  { topic: "🔤 IS or ARE?", sentence: "The book <e>are</e> on the table.", correct: "is", options: ["is", "are", "am", "were"], rule: "💡 The book = one thing → IS!", correctSentence: "✅ The book IS on the table." },
+  { topic: "🔤 IS or ARE?", sentence: "There <e>is</e> many birds in the tree.", correct: "are", options: ["are", "is", "be", "was"], rule: "💡 Many birds = plural → There ARE many birds!", correctSentence: "✅ There ARE many birds in the tree." },
+  { topic: "🔤 IS or ARE?", sentence: "She <e>are</e> my best friend.", correct: "is", options: ["is", "are", "am", "be"], rule: "💡 She = singular → IS. She IS my best friend!", correctSentence: "✅ She IS my best friend." },
+  { topic: "👤 Possessives", sentence: "Mary loves <e>his</e> cat very much.", correct: "her", options: ["her", "his", "their", "my"], rule: "💡 Mary is a girl → HER. His = boys, Her = girls!", correctSentence: "✅ Mary loves HER cat very much." },
+  { topic: "👤 Possessives", sentence: "Tom and his brother play with <e>her</e> toys.", correct: "their", options: ["their", "his", "her", "my"], rule: "💡 Tom AND his brother = two people → THEIR!", correctSentence: "✅ Tom and his brother play with THEIR toys." },
+  { topic: "👤 Possessives", sentence: "John has a dog. <e>Her</e> dog is black.", correct: "His", options: ["His", "Her", "Their", "My"], rule: "💡 John is a boy → HIS dog. Her = for girls!", correctSentence: "✅ John has a dog. HIS dog is black." },
+  { topic: "👤 Possessives", sentence: "Lisa and Tom share <e>his</e> umbrella.", correct: "their", options: ["their", "his", "her", "its"], rule: "💡 Lisa AND Tom = two people → THEIR umbrella!", correctSentence: "✅ Lisa and Tom share THEIR umbrella." },
+  { topic: "🏃 Verb + ING", sentence: "She <e>wearing</e> a red dress today.", correct: "is wearing", options: ["is wearing", "wearing", "wear", "wears"], rule: "💡 Present Continuous = am/is/are + verb-ing. She IS wearing!", correctSentence: "✅ She IS wearing a red dress today." },
+  { topic: "🏃 Verb + ING", sentence: "They <e>playing</e> football now.", correct: "are playing", options: ["are playing", "playing", "plays", "play"], rule: "💡 They + are + playing. They ARE playing!", correctSentence: "✅ They ARE playing football now." },
+  { topic: "🏃 Verb + ING", sentence: "My mom <e>is cook</e> dinner.", correct: "is cooking", options: ["is cooking", "is cook", "cooking", "cooks"], rule: "💡 is + verb-ING → is cookING!", correctSentence: "✅ My mom IS cooking dinner." },
+  { topic: "🏃 Verb + ING", sentence: "I <e>am read</e> a book right now.", correct: "am reading", options: ["am reading", "am read", "reading", "reads"], rule: "💡 am + verb-ING → am readING!", correctSentence: "✅ I AM reading a book right now." },
+  { topic: "📦 Singular & Plural", sentence: "I have two <e>box</e> of crayons.", correct: "boxes", options: ["boxes", "boxs", "box", "a box"], rule: "💡 Two = plural! Box → Boxes (words ending in -x add -es)!", correctSentence: "✅ I have two BOXES of crayons." },
+  { topic: "📦 Singular & Plural", sentence: "She has three <e>childs</e> in her class.", correct: "children", options: ["children", "childs", "child", "childes"], rule: "💡 Child has an irregular plural: child → CHILDREN!", correctSentence: "✅ She has three CHILDREN in her class." },
+  { topic: "❌ Don't / Doesn't", sentence: "She <e>don't</e> like spiders.", correct: "doesn't", options: ["doesn't", "don't", "isn't", "aren't"], rule: "💡 She = singular → DOESN'T. Don't = I/you/we/they!", correctSentence: "✅ She DOESN'T like spiders." },
+  { topic: "❌ Don't / Doesn't", sentence: "They <e>doesn't</e> have a pet.", correct: "don't", options: ["don't", "doesn't", "isn't", "not"], rule: "💡 They = plural → DON'T. Doesn't = he/she/it!", correctSentence: "✅ They DON'T have a pet." },
+  { topic: "❌ Don't / Doesn't", sentence: "He <e>don't</e> want any soup.", correct: "doesn't", options: ["doesn't", "don't", "isn't", "aren't"], rule: "💡 He = singular → DOESN'T want!", correctSentence: "✅ He DOESN'T want any soup." },
+];
+
+const QUESTIONS_PER_GAME = 10;
+let lastPool = [];
+let current = 0, score = 0, lives = 3, answered = false, shuffled = [];
+
+function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+
+function pickQuestions() {
+  let pool = ALL_QUESTIONS.filter(q => !lastPool.includes(q));
+  if (pool.length < QUESTIONS_PER_GAME) pool = [...ALL_QUESTIONS];
+  const picked = shuffle(pool).slice(0, QUESTIONS_PER_GAME);
+  lastPool = picked;
+  return picked;
+}
+
+function startGame() {
+  shuffled = pickQuestions();
+  current = 0; score = 0; lives = 3; answered = false;
+  document.getElementById('qtotal').textContent = QUESTIONS_PER_GAME;
+  document.getElementById('resultScreen').classList.remove('show');
+  document.getElementById('qCard').style.display = 'block';
+  updateStats();
+  showQuestion();
+}
+
+function showQuestion() {
+  if (current >= shuffled.length || lives <= 0) { showResult(); return; }
+  answered = false;
+  const q = shuffled[current];
+
+  document.getElementById('qnum').textContent = current + 1;
+  document.getElementById('topicTag').textContent = q.topic;
+
+  // Build sentence with highlighted error
+  const html = q.sentence.replace('<error>', '<span class="error-word">').replace('</error>', '</span>');
+  document.getElementById('sentenceDisplay').innerHTML = html;
+
+  // Options
+  const grid = document.getElementById('optGrid');
+  grid.innerHTML = '';
+  shuffle(q.options).forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.textContent = opt;
+    btn.onclick = () => checkAnswer(opt, q, btn);
+    grid.appendChild(btn);
+  });
+
+  document.getElementById('ruleBox').className = 'rule-box';
+  document.getElementById('correctSentence').className = 'correct-sentence';
+  document.getElementById('nextBtn').className = 'next-btn';
+
+  const card = document.getElementById('qCard');
+  card.style.animation = 'none'; card.offsetHeight; card.style.animation = 'cardIn 0.5s ease';
+
+  updateProg();
+}
+
+function checkAnswer(chosen, q, btn) {
+  if (answered) return;
+  answered = true;
+  document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+
+  if (chosen === q.correct) {
+    btn.classList.add('correct-pick');
+    score += 10;
+    spawnParticles(btn);
+  } else {
+    btn.classList.add('wrong-pick');
+    lives--;
+    document.querySelectorAll('.opt-btn').forEach(b => {
+      if (b.textContent === q.correct) b.classList.add('correct-pick');
+    });
+  }
+
+  document.getElementById('ruleBox').className = 'rule-box show';
+  document.getElementById('ruleBox').innerHTML = `<span class="rule-icon">📖</span> ${q.rule}`;
+  document.getElementById('correctSentence').className = 'correct-sentence show';
+  document.getElementById('correctSentence').textContent = q.correctSentence;
+  document.getElementById('nextBtn').className = 'next-btn show';
+  updateStats();
+}
+
+function nextQ() {
+  current++;
+  if (current >= shuffled.length || lives <= 0) { showResult(); return; }
+  showQuestion();
+}
+
+function updateStats() {
+  document.getElementById('score').textContent = score;
+  document.getElementById('lives').textContent = lives > 0 ? '❤️'.repeat(lives) : '💔';
+}
+
+function updateProg() {
+  document.getElementById('prog').style.width = (current / shuffled.length * 100) + '%';
+}
+
+function showResult() {
+  document.getElementById('qCard').style.display = 'none';
+  const rs = document.getElementById('resultScreen');
+  rs.classList.add('show');
+  const pct = score / (QUESTIONS_PER_GAME * 10);
+  let big, heading, msg;
+  if (pct >= 0.9) { big = '🏆'; heading = 'GRAMMAR MASTER!'; msg = `Wow! ${score}/${QUESTIONS_PER_GAME*10} points — you're a grammar superstar!`; }
+  else if (pct >= 0.7) { big = '🎉'; heading = 'GREAT DOCTOR!'; msg = `${score}/${QUESTIONS_PER_GAME*10} points — you fixed most of the mistakes!`; }
+  else if (pct >= 0.5) { big = '😊'; heading = 'GOOD EFFORT!'; msg = `${score}/${QUESTIONS_PER_GAME*10} points — keep studying the rules!`; }
+  else { big = '💪'; heading = 'KEEP TRYING!'; msg = `${score}/${QUESTIONS_PER_GAME*10} points — read the rules and try again!`; }
+  document.getElementById('resultBig').textContent = big;
+  document.getElementById('resultHeading').textContent = heading;
+  document.getElementById('resultMsg').textContent = msg;
+}
+
+function spawnParticles(btn) {
+  const rect = btn.getBoundingClientRect();
+  const colors = ['#ff6b6b', '#ffd700', '#00b09b', '#c4b5fd', '#67e8a5'];
+  for (let i = 0; i < 12; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = 6 + Math.random() * 8;
+    const angle = (Math.PI * 2 * i) / 12;
+    const dist = 50 + Math.random() * 60;
+    p.style.cssText = `width:${size}px;height:${size}px;left:${rect.left+rect.width/2}px;top:${rect.top+rect.height/2}px;background:${colors[i%colors.length]};--tx:${Math.cos(angle)*dist}px;--ty:${Math.sin(angle)*dist}px;animation-duration:${0.6+Math.random()*0.3}s`;
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 1000);
+  }
+}
+
+startGame();
+</script>
+</body>
+</html>

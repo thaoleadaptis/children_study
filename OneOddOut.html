@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🦄 Odd One Out - Find the Different Word!</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap');
+
+  :root {
+    --sky: #87CEEB;
+    --sunshine: #FFD700;
+    --grass: #5DBB63;
+    --coral: #FF6B6B;
+    --lavender: #C4A8FF;
+    --mint: #98E4C9;
+    --peach: #FFB347;
+    --white: #FFFFFF;
+    --deep: #2D3561;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(135deg, #87CEEB 0%, #B8E4FF 50%, #E0F4FF 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Floating clouds */
+  .cloud {
+    position: fixed;
+    background: white;
+    border-radius: 50px;
+    opacity: 0.7;
+    animation: floatCloud linear infinite;
+  }
+  .cloud::before, .cloud::after {
+    content: '';
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+  }
+  .cloud1 { width: 120px; height: 40px; top: 8%; animation-duration: 25s; animation-delay: 0s; left: -150px; }
+  .cloud1::before { width: 60px; height: 60px; top: -30px; left: 20px; }
+  .cloud1::after { width: 40px; height: 40px; top: -20px; right: 20px; }
+  .cloud2 { width: 90px; height: 30px; top: 20%; animation-duration: 35s; animation-delay: -10s; left: -120px; }
+  .cloud2::before { width: 45px; height: 45px; top: -22px; left: 15px; }
+  .cloud2::after { width: 30px; height: 30px; top: -15px; right: 15px; }
+  .cloud3 { width: 150px; height: 50px; top: 60%; animation-duration: 20s; animation-delay: -5s; left: -180px; }
+  .cloud3::before { width: 70px; height: 70px; top: -35px; left: 25px; }
+  .cloud3::after { width: 50px; height: 50px; top: -25px; right: 25px; }
+
+  @keyframes floatCloud {
+    from { left: -200px; }
+    to { left: 110vw; }
+  }
+
+  /* Stars */
+  .star {
+    position: fixed;
+    font-size: 20px;
+    animation: twinkle 2s infinite;
+    pointer-events: none;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.3); }
+  }
+
+  .game-container {
+    max-width: 750px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 20px 0 10px;
+    position: relative;
+  }
+
+  .game-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.5em;
+    color: var(--deep);
+    text-shadow: 3px 3px 0 var(--sunshine), 5px 5px 0 rgba(0,0,0,0.1);
+    letter-spacing: 2px;
+    line-height: 1.1;
+  }
+
+  .game-subtitle {
+    font-size: 1em;
+    color: #555;
+    margin-top: 5px;
+    font-weight: 700;
+  }
+
+  /* Score bar */
+  .score-bar {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 15px 0;
+    flex-wrap: wrap;
+  }
+
+  .score-chip {
+    background: white;
+    border-radius: 30px;
+    padding: 8px 20px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.1em;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .score-chip.stars { color: #E65C00; }
+  .score-chip.lives { color: var(--coral); }
+  .score-chip.question { color: var(--deep); }
+
+  /* Progress bar */
+  .progress-wrap {
+    background: rgba(255,255,255,0.5);
+    border-radius: 20px;
+    height: 14px;
+    margin: 10px 0 20px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--grass), var(--sunshine));
+    border-radius: 20px;
+    transition: width 0.5s ease;
+  }
+
+  /* Question card */
+  .question-card {
+    background: white;
+    border-radius: 24px;
+    padding: 25px;
+    box-shadow: 0 8px 0 rgba(0,0,0,0.08), 0 15px 30px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    animation: slideIn 0.4s ease;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--coral), var(--sunshine), var(--grass), var(--lavender));
+  }
+
+  .instruction {
+    font-size: 0.9em;
+    color: #888;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  .question-prompt {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.3em;
+    color: var(--deep);
+    margin-bottom: 20px;
+  }
+
+  /* Word choices */
+  .choices-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .choice-btn {
+    background: linear-gradient(135deg, #F8F9FF, #EEF2FF);
+    border: 3px solid #D0D8FF;
+    border-radius: 16px;
+    padding: 18px 10px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.3em;
+    color: var(--deep);
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 1px;
+  }
+
+  .choice-btn:hover:not(:disabled) {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 0 #B0B8FF;
+    background: linear-gradient(135deg, #EEF2FF, #E0E8FF);
+    border-color: #9EB0FF;
+  }
+
+  .choice-btn:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+
+  .choice-btn.correct {
+    background: linear-gradient(135deg, #C8F7D0, #A8EDB5);
+    border-color: var(--grass);
+    color: #1a7a2a;
+    animation: correctPop 0.5s ease;
+  }
+
+  .choice-btn.wrong {
+    background: linear-gradient(135deg, #FFD0D0, #FFB0B0);
+    border-color: var(--coral);
+    color: #a01020;
+    animation: shake 0.5s ease;
+  }
+
+  .choice-btn .letter-badge {
+    position: absolute;
+    top: 6px; left: 8px;
+    font-size: 0.55em;
+    background: var(--lavender);
+    color: white;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+  }
+
+  @keyframes correctPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(5px); }
+  }
+
+  /* Feedback */
+  .feedback-box {
+    border-radius: 16px;
+    padding: 15px;
+    margin-top: 15px;
+    font-size: 1em;
+    font-weight: 700;
+    text-align: center;
+    animation: fadeIn 0.3s ease;
+    display: none;
+  }
+  .feedback-box.show { display: block; }
+  .feedback-box.correct-fb { background: #D4EDDA; color: #155724; border: 2px solid #C3E6CB; }
+  .feedback-box.wrong-fb { background: #F8D7DA; color: #721c24; border: 2px solid #F5C6CB; }
+
+  /* Next button */
+  .next-btn {
+    display: none;
+    background: linear-gradient(135deg, var(--sunshine), #FFA500);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 14px 40px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.3em;
+    cursor: pointer;
+    box-shadow: 0 6px 0 #CC8400;
+    transition: all 0.2s;
+    margin: 15px auto 0;
+    letter-spacing: 1px;
+  }
+  .next-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 9px 0 #CC8400;
+  }
+  .next-btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 3px 0 #CC8400;
+  }
+  .next-btn.show { display: block; }
+
+  /* Result screen */
+  .result-screen {
+    display: none;
+    text-align: center;
+    background: white;
+    border-radius: 24px;
+    padding: 40px 30px;
+    box-shadow: 0 8px 0 rgba(0,0,0,0.08);
+    animation: slideIn 0.5s ease;
+  }
+  .result-screen.show { display: block; }
+
+  .result-emoji { font-size: 4em; display: block; margin-bottom: 10px; }
+  .result-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2em;
+    color: var(--deep);
+    margin-bottom: 10px;
+  }
+  .result-score {
+    font-size: 1.2em;
+    color: #555;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  .stars-display { font-size: 2em; margin: 15px 0; }
+
+  .restart-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 14px 40px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.3em;
+    cursor: pointer;
+    box-shadow: 0 6px 0 #4a3578;
+    transition: all 0.2s;
+    letter-spacing: 1px;
+  }
+  .restart-btn:hover { transform: translateY(-3px); box-shadow: 0 9px 0 #4a3578; }
+  .restart-btn:active { transform: translateY(3px); box-shadow: 0 3px 0 #4a3578; }
+
+  /* Confetti */
+  .confetti-piece {
+    position: fixed;
+    width: 10px; height: 10px;
+    border-radius: 2px;
+    animation: confettiFall linear forwards;
+    pointer-events: none;
+    z-index: 999;
+  }
+  @keyframes confettiFall {
+    0% { top: -10px; opacity: 1; transform: rotate(0deg) translateX(0); }
+    100% { top: 100vh; opacity: 0; transform: rotate(720deg) translateX(100px); }
+  }
+
+  /* Category hint */
+  .category-tag {
+    display: inline-block;
+    background: var(--lavender);
+    color: white;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: 800;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Clouds -->
+<div class="cloud cloud1"></div>
+<div class="cloud cloud2"></div>
+<div class="cloud cloud3"></div>
+
+<!-- Stars -->
+<div class="star" style="top:10%;left:5%;animation-delay:0s">⭐</div>
+<div class="star" style="top:15%;right:8%;animation-delay:0.7s">🌟</div>
+<div class="star" style="top:70%;left:3%;animation-delay:1.2s">✨</div>
+<div class="star" style="top:80%;right:5%;animation-delay:0.4s">⭐</div>
+
+<div class="game-container">
+  <div class="header">
+    <div class="game-title">🦄 ODD ONE OUT</div>
+    <div class="game-subtitle">Find the word that does NOT belong! 🔍</div>
+  </div>
+
+  <div class="score-bar">
+    <div class="score-chip stars">⭐ <span id="score">0</span> points</div>
+    <div class="score-chip lives">❤️ <span id="lives">3</span> lives</div>
+    <div class="score-chip question">📝 <span id="qnum">1</span> / <span id="qtotal">0</span></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-fill" id="progress" style="width:0%"></div>
+  </div>
+
+  <div class="question-card" id="questionCard">
+    <div class="instruction">🎯 Choose the ODD word</div>
+    <div class="category-tag" id="categoryTag">Category</div>
+    <div class="question-prompt" id="questionPrompt">Which word is DIFFERENT?</div>
+    <div class="choices-grid" id="choicesGrid"></div>
+    <div class="feedback-box" id="feedbackBox"></div>
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next ➡️</button>
+  </div>
+
+  <div class="result-screen" id="resultScreen">
+    <span class="result-emoji" id="resultEmoji">🎉</span>
+    <div class="result-title" id="resultTitle">Excellent!</div>
+    <div class="result-score" id="resultScore"></div>
+    <div class="stars-display" id="starsDisplay"></div>
+    <button class="restart-btn" onclick="restartGame()">🔄 Play Again!</button>
+  </div>
+</div>
+
+<script>
+const ALL_QUESTIONS = [
+  { category: "🐾 Animals vs Body Parts", words: ["fingers", "toes", "nose", "tiger"], odd: "tiger", explanation: "TIGER 🐯 is an animal. 'Fingers', 'toes', 'nose' are body parts!" },
+  { category: "🌈 Colors vs Clothes", words: ["red", "blue", "shirt", "green"], odd: "shirt", explanation: "SHIRT 👕 is clothing. 'Red', 'blue', 'green' are colors!" },
+  { category: "🍎 Fruits vs Things", words: ["apple", "pen", "banana", "mango"], odd: "pen", explanation: "PEN ✏️ is a stationery item. 'Apple', 'banana', 'mango' are fruits!" },
+  { category: "👗 Clothes", words: ["shoes", "shorts", "socks", "book"], odd: "book", explanation: "BOOK 📚 is not clothing! 'Shoes', 'shorts', 'socks' are clothes!" },
+  { category: "🏃 Action Words", words: ["ride", "dance", "fly", "happy"], odd: "happy", explanation: "HAPPY 😊 is a feeling! 'Ride', 'dance', 'fly' are actions!" },
+  { category: "📅 Days of the Week", words: ["Monday", "Friday", "Wednesday", "animal"], odd: "animal", explanation: "ANIMAL 🐘 is not a day! 'Monday', 'Friday', 'Wednesday' are days!" },
+  { category: "🌍 Places", words: ["school", "park", "home", "jump"], odd: "jump", explanation: "JUMP 🦘 is an action! 'School', 'park', 'home' are places!" },
+  { category: "👨‍👩‍👧‍👦 Family", words: ["mother", "father", "sister", "table"], odd: "table", explanation: "TABLE 🪑 is furniture! 'Mother', 'father', 'sister' are family members!" },
+  { category: "🌸 Nature vs School", words: ["sun", "rain", "cloud", "pencil"], odd: "pencil", explanation: "PENCIL ✏️ is a school item! 'Sun', 'rain', 'cloud' are nature words!" },
+  { category: "🎨 School Items", words: ["pen", "paper", "bag", "cat"], odd: "cat", explanation: "CAT 🐱 is an animal! 'Pen', 'paper', 'bag' are school items!" },
+  { category: "🐠 Animals vs Food", words: ["fish", "chicken", "pizza", "dog"], odd: "dog", explanation: "DOG 🐶 is a pet! 'Fish', 'chicken', 'pizza' are food!" },
+  { category: "🎵 Hobbies vs Things", words: ["singing", "swimming", "reading", "table"], odd: "table", explanation: "TABLE 🪑 is a thing! 'Singing', 'swimming', 'reading' are hobbies!" },
+  { category: "🍦 Food vs Colors", words: ["yellow", "orange", "purple", "cake"], odd: "cake", explanation: "CAKE 🎂 is food! 'Yellow', 'orange', 'purple' are colors!" },
+  { category: "🚗 Transport vs Animals", words: ["bus", "car", "train", "elephant"], odd: "elephant", explanation: "ELEPHANT 🐘 is an animal! 'Bus', 'car', 'train' are transport!" },
+  { category: "🏠 Rooms vs Furniture", words: ["bedroom", "kitchen", "table", "bathroom"], odd: "table", explanation: "TABLE 🪑 is furniture! 'Bedroom', 'kitchen', 'bathroom' are rooms!" },
+  { category: "🌺 Flowers vs Animals", words: ["rose", "daisy", "lotus", "camel"], odd: "camel", explanation: "CAMEL 🐪 is an animal! 'Rose', 'daisy', 'lotus' are flowers!" },
+  { category: "🎒 School vs Home", words: ["teacher", "doctor", "ruler", "singer"], odd: "ruler", explanation: "RULER 📏 is a thing! 'Teacher', 'doctor', 'singer' are jobs!" },
+  { category: "🔵 Shapes vs Colors", words: ["circle", "square", "blue", "triangle"], odd: "blue", explanation: "BLUE 🔵 is a color! 'Circle', 'square', 'triangle' are shapes!" },
+  { category: "🍇 Fruits vs Vegetables", words: ["carrot", "apple", "mango", "banana"], odd: "carrot", explanation: "CARROT 🥕 is a vegetable! 'Apple', 'mango', 'banana' are fruits!" },
+  { category: "🌙 Time Words vs Days", words: ["morning", "evening", "night", "Tuesday"], odd: "Tuesday", explanation: "TUESDAY 📅 is a day! 'Morning', 'evening', 'night' are times of day!" },
+  { category: "🖐 Body Parts vs Clothes", words: ["hand", "hat", "jacket", "foot"], odd: "foot", explanation: "FOOT 🦶 is a body part! 'Hat', 'jacket' are clothes... wait — FOOT doesn't belong with hat/jacket group. Hat and jacket are clothes, hand and foot are body parts — JACKET is the odd one if grouping clothes differently. Here: 'hand' and 'foot' are body parts, 'hat' and 'jacket' are clothes!" },
+  { category: "🏃 Verbs vs Adjectives", words: ["big", "small", "run", "tall"], odd: "run", explanation: "RUN 🏃 is an action verb! 'Big', 'small', 'tall' are describing words!" },
+  { category: "🌊 Nature vs Man-made", words: ["river", "mountain", "ocean", "house"], odd: "house", explanation: "HOUSE 🏠 is man-made! 'River', 'mountain', 'ocean' are natural things!" },
+  { category: "🎁 Toys vs School Items", words: ["ball", "doll", "kite", "pencil"], odd: "pencil", explanation: "PENCIL ✏️ is a school item! 'Ball', 'doll', 'kite' are toys!" },
+  { category: "🐕 Pets vs Wild Animals", words: ["dog", "cat", "rabbit", "lion"], odd: "lion", explanation: "LION 🦁 is a wild animal! 'Dog', 'cat', 'rabbit' are pets!" },
+];
+
+const QUESTIONS_PER_GAME = 10;
+let lastPool = [];
+
+let currentQ = 0;
+let score = 0;
+let lives = 3;
+let answered = false;
+let shuffled = [];
+
+function shuffle(arr) {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
+
+function pickQuestions() {
+  // Avoid repeating questions from last round
+  let pool = ALL_QUESTIONS.filter(q => !lastPool.includes(q));
+  if (pool.length < QUESTIONS_PER_GAME) pool = [...ALL_QUESTIONS];
+  const picked = shuffle(pool).slice(0, QUESTIONS_PER_GAME);
+  lastPool = picked;
+  return picked;
+}
+
+function startGame() {
+  shuffled = pickQuestions();
+  currentQ = 0; score = 0; lives = 3; answered = false;
+  document.getElementById('qtotal').textContent = QUESTIONS_PER_GAME;
+  document.getElementById('resultScreen').classList.remove('show');
+  document.getElementById('questionCard').style.display = 'block';
+  updateScoreBar();
+  showQuestion();
+}
+
+function showQuestion() {
+  if (currentQ >= shuffled.length || lives <= 0) {
+    showResult();
+    return;
+  }
+  answered = false;
+  const q = shuffled[currentQ];
+  document.getElementById('qnum').textContent = currentQ + 1;
+  document.getElementById('categoryTag').textContent = q.category;
+  document.getElementById('questionPrompt').textContent = 'Which word is DIFFERENT?';
+
+  const grid = document.getElementById('choicesGrid');
+  grid.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+  const shuffledWords = shuffle(q.words);
+
+  shuffledWords.forEach((word, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.innerHTML = `<span class="letter-badge">${letters[i]}</span>${word.toUpperCase()}`;
+    btn.onclick = () => checkAnswer(word, q.odd, q.explanation, btn);
+    grid.appendChild(btn);
+  });
+
+  document.getElementById('feedbackBox').className = 'feedback-box';
+  document.getElementById('feedbackBox').textContent = '';
+  document.getElementById('nextBtn').className = 'next-btn';
+  updateProgress();
+}
+
+function checkAnswer(chosen, correct, explanation, btn) {
+  if (answered) return;
+  answered = true;
+
+  const allBtns = document.querySelectorAll('.choice-btn');
+  allBtns.forEach(b => b.disabled = true);
+
+  const fb = document.getElementById('feedbackBox');
+
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    score += 10;
+    fb.className = 'feedback-box correct-fb show';
+    fb.innerHTML = `✅ Correct! 🎉 ${explanation}`;
+    spawnConfetti();
+  } else {
+    btn.classList.add('wrong');
+    lives--;
+    // Highlight correct
+    allBtns.forEach(b => {
+      if (b.textContent.toLowerCase().includes(correct.toLowerCase())) {
+        b.classList.add('correct');
+      }
+    });
+    fb.className = 'feedback-box wrong-fb show';
+    fb.innerHTML = `❌ Oops! The answer is <strong>${correct.toUpperCase()}</strong>. ${explanation}`;
+  }
+
+  updateScoreBar();
+  document.getElementById('nextBtn').className = 'next-btn show';
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= shuffled.length || lives <= 0) {
+    showResult();
+    return;
+  }
+
+  const card = document.getElementById('questionCard');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = 'slideIn 0.4s ease';
+  showQuestion();
+}
+
+function updateScoreBar() {
+  document.getElementById('score').textContent = score;
+  document.getElementById('lives').textContent = lives > 0 ? '❤️'.repeat(lives) : '💔';
+}
+
+function updateProgress() {
+  const pct = (currentQ / shuffled.length) * 100;
+  document.getElementById('progress').style.width = pct + '%';
+}
+
+function showResult() {
+  document.getElementById('questionCard').style.display = 'none';
+  const rs = document.getElementById('resultScreen');
+  rs.classList.add('show');
+
+  const pct = score / (QUESTIONS_PER_GAME * 10);
+  let emoji, title, stars;
+  if (pct >= 0.9) { emoji = '🏆'; title = 'SUPERSTAR! Amazing!'; stars = '⭐⭐⭐'; }
+  else if (pct >= 0.7) { emoji = '🎉'; title = 'Well Done! Great job!'; stars = '⭐⭐'; }
+  else if (pct >= 0.5) { emoji = '😊'; title = 'Good Try! Keep going!'; stars = '⭐'; }
+  else { emoji = '💪'; title = 'Keep Practicing! You can do it!'; stars = '🌱'; }
+
+  document.getElementById('resultEmoji').textContent = emoji;
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultScore').textContent = `You scored ${score} out of ${QUESTIONS_PER_GAME * 10} points!`;
+  document.getElementById('starsDisplay').textContent = stars;
+
+  if (pct >= 0.7) spawnConfetti();
+}
+
+function restartGame() {
+  startGame();
+}
+
+function spawnConfetti() {
+  const colors = ['#FF6B6B', '#FFD700', '#5DBB63', '#C4A8FF', '#87CEEB', '#FFB347'];
+  for (let i = 0; i < 30; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + 'vw';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+    piece.style.animationDelay = Math.random() * 0.5 + 's';
+    piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+    document.body.appendChild(piece);
+    setTimeout(() => piece.remove(), 3500);
+  }
+}
+
+startGame();
+</script>
+</body>
+</html>
