@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ôn Tập Hoạt Động Trải Nghiệm Lớp 4</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pur:#9C27B0; --pur-d:#6A1B9A; --pink:#E91E63; --pink-d:#880E4F;
+    --teal:#00BCD4; --teal-d:#006064; --amber:#FFC107; --amber-d:#FF6F00;
+    --green:#43A047; --green-d:#1B5E20; --red:#E53935; --red-d:#B71C1C;
+    --bg1:#F3E5F5; --bg2:#FCE4EC; --shadow:rgba(0,0,0,0.12);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Nunito",sans-serif;min-height:100vh;
+    background:linear-gradient(145deg,#F3E5F5 0%,#FCE4EC 50%,#E8F5E9 100%);
+    color:#311B92;overflow-x:hidden;
+  }
+  body::before{
+    content:"🌟💫✨";position:fixed;top:10px;left:-140px;font-size:48px;
+    opacity:.13;animation:drift 32s linear infinite;pointer-events:none;z-index:0;
+  }
+  @keyframes drift{from{transform:translateX(0)}to{transform:translateX(110vw)}}
+  .app{max-width:760px;margin:0 auto;padding:20px 16px 70px;position:relative;z-index:1}
+
+  /* HEADER */
+  .header{text-align:center;margin-bottom:22px;animation:popIn .6s cubic-bezier(.34,1.56,.64,1) both}
+  @keyframes popIn{from{opacity:0;transform:scale(.7) translateY(-20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+  .header .icons{font-size:48px;display:flex;justify-content:center;gap:8px;margin-bottom:6px}
+  .header .icons span{display:inline-block;animation:bounce 2.5s ease-in-out infinite}
+  .header .icons span:nth-child(2){animation-delay:.4s}.header .icons span:nth-child(3){animation-delay:.8s}
+  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  .header h1{font-family:"Pacifico",cursive;font-size:clamp(20px,4.5vw,30px);color:var(--pur-d);
+    text-shadow:0 3px 0 rgba(255,255,255,.8),0 5px 12px rgba(0,0,0,.1);line-height:1.3}
+  .header p{font-size:14px;color:var(--pink-d);font-weight:700;margin-top:5px}
+
+  /* SCOREBAR */
+  .scorebar{display:flex;justify-content:space-around;background:white;border-radius:22px;
+    padding:10px 8px;margin-bottom:16px;box-shadow:0 4px 20px var(--shadow);
+    animation:popIn .65s cubic-bezier(.34,1.56,.64,1) .1s both}
+  .sc-item{text-align:center}
+  .sc-item .lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#9E9E9E}
+  .sc-item .val{font-family:"Pacifico",cursive;font-size:26px;line-height:1;color:var(--pur-d)}
+  .sc-item .val.ok{color:var(--green-d)}.sc-item .val.bad{color:var(--red)}
+  .progress-track{height:10px;background:#E1BEE7;border-radius:10px;margin-bottom:16px;
+    overflow:hidden;box-shadow:inset 0 2px 4px rgba(0,0,0,.06)}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--pur),var(--pink));
+    border-radius:10px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+
+  /* CARD */
+  .card{background:white;border-radius:26px;padding:24px 20px;box-shadow:0 8px 32px var(--shadow);
+    margin-bottom:16px;animation:slideUp .4s cubic-bezier(.34,1.56,.64,1) both;
+    border-top:5px solid var(--pur)}
+  @keyframes slideUp{from{opacity:0;transform:translateY(28px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+  .q-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .q-badge{background:linear-gradient(135deg,var(--pur),var(--pur-d));color:white;
+    font-family:"Pacifico",cursive;font-size:13px;padding:5px 15px;border-radius:20px;letter-spacing:.04em}
+  .q-tag{font-size:11px;font-weight:700;color:#BDBDBD;text-transform:uppercase;letter-spacing:.06em}
+  .q-text{font-size:clamp(15px,3.5vw,19px);font-weight:800;color:#311B92;line-height:1.55;margin-bottom:18px}
+
+  /* OPTIONS */
+  .opts{display:flex;flex-direction:column;gap:9px}
+  .opt{display:flex;align-items:center;gap:12px;background:#F3E5F5;border:2.5px solid #CE93D8;
+    border-radius:16px;padding:12px 15px;cursor:pointer;font-size:15px;font-weight:600;
+    color:#4A148C;transition:all .17s ease;text-align:left;width:100%;font-family:"Nunito",sans-serif}
+  .opt:hover:not(:disabled){background:#E1BEE7;border-color:var(--pur);transform:translateX(5px);
+    box-shadow:0 4px 14px rgba(156,39,176,.2)}
+  .opt .ltr{min-width:32px;width:32px;height:32px;border-radius:50%;background:white;
+    border:2px solid #CE93D8;display:flex;align-items:center;justify-content:center;
+    font-family:"Pacifico",cursive;font-size:14px;color:var(--pur-d);transition:all .17s;flex-shrink:0}
+  .opt:disabled{cursor:default}
+  .opt.correct{background:#E8F5E9;border-color:var(--green);color:var(--green-d);
+    animation:boing .4s cubic-bezier(.34,1.56,.64,1)}
+  .opt.correct .ltr{background:var(--green);border-color:var(--green);color:white}
+  .opt.wrong{background:#FFEBEE;border-color:var(--red);color:var(--red-d);animation:jiggle .4s ease}
+  .opt.wrong .ltr{background:var(--red);border-color:var(--red);color:white}
+  @keyframes boing{0%{transform:scale(1)}50%{transform:scale(1.04) translateX(4px)}100%{transform:scale(1)}}
+  @keyframes jiggle{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+
+  /* FEEDBACK */
+  .fb{display:none;margin-top:13px;padding:13px 16px;border-radius:14px;font-size:15px;
+    font-weight:700;animation:fadeIn .3s ease}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .fb.ok{background:#E8F5E9;border:2px solid var(--green);color:var(--green-d)}
+  .fb.bad{background:#FFF3E0;border:2px solid var(--amber);color:var(--amber-d)}
+  .fb .emo{font-size:20px;margin-right:6px}
+
+  /* ESSAY */
+  .ans-box{display:none;margin-top:13px;background:#F3E5F5;border:2.5px solid var(--pur);
+    border-radius:16px;padding:15px;animation:fadeIn .4s ease}
+  .ans-box .ans-hd{font-family:"Pacifico",cursive;font-size:12px;color:var(--pur-d);
+    text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+  .ans-box .ans-body{font-size:14px;line-height:1.9;color:#4A148C;white-space:pre-line;font-weight:600}
+
+  /* BUTTONS */
+  .show-btn{display:none;margin-top:13px;background:linear-gradient(135deg,var(--amber),var(--amber-d));
+    color:white;border:none;border-radius:14px;padding:11px 22px;font-family:"Pacifico",cursive;
+    font-size:15px;cursor:pointer;box-shadow:0 4px 14px rgba(255,193,7,.35);transition:all .17s}
+  .show-btn:hover{transform:translateY(-2px)}
+  .next-btn{display:none;width:100%;margin-top:13px;
+    background:linear-gradient(135deg,var(--teal),var(--teal-d));color:white;border:none;
+    border-radius:18px;padding:15px;font-family:"Pacifico",cursive;font-size:18px;cursor:pointer;
+    box-shadow:0 6px 22px rgba(0,96,100,.28);transition:all .17s;letter-spacing:.04em}
+  .next-btn:hover{transform:translateY(-3px)}
+
+  /* HOME */
+  .home{animation:slideUp .5s cubic-bezier(.34,1.56,.64,1) both}
+  .home-card{background:white;border-radius:26px;padding:24px 20px;
+    box-shadow:0 8px 32px var(--shadow);border-top:5px solid var(--pink)}
+  .mode-title{font-family:"Pacifico",cursive;font-size:19px;color:var(--pur-d);
+    text-align:center;margin-bottom:16px;letter-spacing:.04em}
+  .mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:16px}
+  .mode-btn{background:#F3E5F5;border:3px solid #CE93D8;border-radius:20px;padding:17px 11px;
+    cursor:pointer;text-align:center;transition:all .2s;font-family:"Pacifico",cursive}
+  .mode-btn:hover{border-color:var(--pur);transform:translateY(-4px);box-shadow:0 8px 22px rgba(156,39,176,.18)}
+  .mode-btn.sel{border-color:var(--pur);background:#EDE7F6}
+  .mode-btn .mi{font-size:36px;display:block;margin-bottom:5px}
+  .mode-btn .mn{font-size:15px;font-weight:800;display:block;color:var(--pur-d)}
+  .mode-btn .md{font-size:12px;font-weight:600;color:#9E9E9E;display:block;margin-top:3px;font-family:"Nunito",sans-serif}
+  .start-btn{width:100%;background:linear-gradient(135deg,var(--pur),var(--pur-d));color:white;
+    border:none;border-radius:18px;padding:17px;font-family:"Pacifico",cursive;font-size:21px;
+    cursor:pointer;box-shadow:0 8px 24px rgba(106,27,154,.32);transition:all .18s;letter-spacing:.04em}
+  .start-btn:hover{transform:translateY(-3px) scale(1.01)}
+
+  /* RESULTS */
+  .results{display:none;animation:slideUp .5s cubic-bezier(.34,1.56,.64,1) both}
+  .res-card{background:white;border-radius:28px;padding:34px 24px;box-shadow:0 12px 44px var(--shadow);
+    text-align:center;border-top:6px solid var(--pur)}
+  .trophy{font-size:84px;display:block;margin-bottom:8px;
+    animation:trophyBounce .8s cubic-bezier(.34,1.56,.64,1) .2s both}
+  @keyframes trophyBounce{from{transform:scale(0) rotate(-20deg)}to{transform:scale(1) rotate(0)}}
+  .res-title{font-family:"Pacifico",cursive;font-size:28px;color:var(--pur-d);letter-spacing:.04em}
+  .res-score{font-family:"Pacifico",cursive;font-size:58px;
+    background:linear-gradient(135deg,var(--pur-d),var(--pink-d));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    background-clip:text;line-height:1;margin:10px 0}
+  .res-msg{font-size:16px;color:#757575;font-weight:700;margin-bottom:20px}
+  .res-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+  .res-stat{background:#F3E5F5;border-radius:16px;padding:13px}
+  .res-stat .sv{font-family:"Pacifico",cursive;font-size:28px}
+  .res-stat .sl{font-size:13px;font-weight:700;color:#9E9E9E}
+  .res-stat.g .sv{color:var(--green-d)}.res-stat.r .sv{color:var(--red)}
+  .restart-btn{background:linear-gradient(135deg,var(--pur),var(--pur-d));color:white;
+    border:none;border-radius:18px;padding:17px 42px;font-family:"Pacifico",cursive;font-size:20px;
+    cursor:pointer;box-shadow:0 8px 24px rgba(106,27,154,.3);transition:all .18s;letter-spacing:.04em}
+  .restart-btn:hover{transform:translateY(-3px) scale(1.02)}
+
+  /* CONFETTI */
+  .cfwrap{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:999;overflow:hidden}
+  .cf{position:absolute;border-radius:2px;animation:cffall linear forwards}
+  @keyframes cffall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}
+    100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+  @media(max-width:480px){.mode-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div class="icons"><span>🌟</span><span>🤝</span><span>🌿</span></div>
+    <h1>Ôn Tập Hoạt Động<br>Trải Nghiệm</h1>
+    <p>✨ Lớp 4 – Cuối Học Kì II</p>
+  </div>
+
+  <!-- HOME -->
+  <div class="home" id="homeScreen">
+    <div class="home-card">
+      <div class="mode-title">🎮 Chọn chế độ ôn tập</div>
+      <div class="mode-grid">
+        <div class="mode-btn sel" id="m-all" onclick="pickMode('all')"><span class="mi">📋</span><span class="mn">Tất Cả</span><span class="md">24 câu hỏi</span></div>
+        <div class="mode-btn" id="m-tn" onclick="pickMode('tn')"><span class="mi">🅰️</span><span class="mn">Trắc Nghiệm</span><span class="md">20 câu hỏi</span></div>
+        <div class="mode-btn" id="m-tl" onclick="pickMode('tl')"><span class="mi">✍️</span><span class="mn">Tự Luận</span><span class="md">4 câu hỏi</span></div>
+        <div class="mode-btn" id="m-rd" onclick="pickMode('rd')"><span class="mi">🎲</span><span class="mn">Ngẫu Nhiên</span><span class="md">10 câu bất kỳ</span></div>
+      </div>
+      <button class="start-btn" onclick="startGame()">🚀 Bắt đầu ôn tập!</button>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quizScreen" style="display:none;">
+    <div class="scorebar">
+      <div class="sc-item"><div class="lbl">Câu</div><div class="val" id="scQ">1</div></div>
+      <div class="sc-item"><div class="lbl">Đúng</div><div class="val ok" id="scOk">0</div></div>
+      <div class="sc-item"><div class="lbl">Sai</div><div class="val bad" id="scBad">0</div></div>
+      <div class="sc-item"><div class="lbl">Còn lại</div><div class="val" id="scLeft">0</div></div>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="pBar" style="width:0%"></div></div>
+    <div class="card" id="qCard">
+      <div class="q-meta">
+        <span class="q-badge" id="qBadge">Câu 1</span>
+        <span class="q-tag" id="qTag">Trắc nghiệm</span>
+      </div>
+      <div class="q-text" id="qText"></div>
+      <div id="optsArea"></div>
+      <div class="fb" id="fb"></div>
+      <div class="ans-box" id="ansBox"><div class="ans-hd">✅ Gợi ý đáp án</div><div class="ans-body" id="ansBody"></div></div>
+      <button class="show-btn" id="showBtn" onclick="revealAnswer()">💡 Xem đáp án</button>
+      <button class="next-btn" id="nextBtn" onclick="goNext()">Câu tiếp theo →</button>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results" id="resScreen">
+    <div class="res-card">
+      <span class="trophy" id="rTrophy">🏆</span>
+      <div class="res-title" id="rTitle">Xuất sắc!</div>
+      <div class="res-score" id="rScore">0/0</div>
+      <div class="res-msg" id="rMsg"></div>
+      <div class="res-grid">
+        <div class="res-stat g"><div class="sv" id="rOk">0</div><div class="sl">✅ Câu đúng</div></div>
+        <div class="res-stat r"><div class="sv" id="rBad">0</div><div class="sl">❌ Câu sai</div></div>
+      </div>
+      <button class="restart-btn" onclick="goHome()">🏠 Chơi lại</button>
+    </div>
+  </div>
+
+</div>
+<div class="cfwrap" id="cfWrap"></div>
+
+<script>
+const LT = ["A","B","C","D"];
+const QS = [{"t": "tn", "q": "Câu 1: Khi lựa chọn mua sắm dịp Tết, chúng ta nên ưu tiên những món đồ nào?", "o": ["Những món đồ đắt tiền nhất", "Những món đồ không cần thiết", "Những món đồ thực sự cần thiết và hữu ích", "Những món đồ có màu sắc đẹp mắt"], "a": 2}, {"t": "tn", "q": "Câu 2: Khi chào đón xuân mới, chúng ta thường làm gì?", "o": ["Sắp xếp và dọn dẹp nhà cửa", "Bỏ qua và không quan tâm", "Mất kiên nhẫn và không giúp đỡ", "Gây rối và phá hoại"], "a": 0}, {"t": "tn", "q": "Câu 3: Khi nhận ra nguy cơ xâm hại trẻ em, chúng ta nên làm gì?", "o": ["Lập tức thông báo và tìm sự giúp đỡ từ người lớn", "Không quan tâm và bỏ qua", "Tự mình giải quyết và không thông báo cho ai", "Thực hiện hành vi xâm hại trẻ em"], "a": 0}, {"t": "tn", "q": "Câu 4: Khi gặp nguy hiểm, chúng ta nên làm gì?", "o": ["Đứng im để tránh nguy hiểm", "Đứng im và không làm gì", "Gọi ngay số cấp cứu hoặc tìm sự giúp đỡ từ người lớn", "Không quan tâm và bỏ qua"], "a": 2}, {"t": "tn", "q": "Câu 5: Em nhận thấy một người lớn trong gia đình có hành vi không đúng và gây hại cho các thành viên khác. Em sẽ làm gì?", "o": ["Bỏ qua và không làm gì", "Chia sẻ về những điều mà em thấy đang xảy ra trong gia đình với thành viên em tin tưởng", "Chế giễu và châm chọc người trưởng thành", "Tự mình giải quyết và không nói với ai"], "a": 1}, {"t": "tn", "q": "Câu 6: Để tự bảo vệ bản thân, chúng ta cần làm gì?", "o": ["Tìm hiểu về những cách phòng vệ bản thân trong cuộc sống hàng ngày", "Tin tưởng hoàn toàn vào mọi người xung quanh", "Không quan tâm và không biết về các tình huống nguy hiểm", "Tự ý kiến và không lắng nghe lời khuyên của người khác"], "a": 0}, {"t": "tn", "q": "Câu 7: Một hoạt động kết nối cộng đồng có thể là gì?", "o": ["Gia đình hỗ trợ nhau", "Những câu lạc bộ phát triển về văn hoá, thể chất", "Tự mình điều hành mọi việc", "Khoe khoang và tự cao về thành tích của mình"], "a": 1}, {"t": "tn", "q": "Câu 8: Em nhìn thấy một người già yếu đang cố gắng băng qua đường nhưng gặp khó khăn. Em sẽ làm gì để giúp đỡ họ?", "o": ["Đứng nhìn và không giúp đỡ", "Đi ngang qua và không chú ý đến tình huống", "Chạy tới và giúp người già qua đường một cách an toàn", "Trêu chọc và bắt nạt người già vì tình huống của họ"], "a": 2}, {"t": "tn", "q": "Câu 9: Trong hoạt động cộng đồng, biểu hiện của lòng nhân ái là gì?", "o": ["Bỏ qua và không quan tâm đến người khác", "Chia sẻ và giúp đỡ người khác trong khó khăn", "Gây phiền hà và gây rối cho người khác", "Chê bai và trêu chọc người khác"], "a": 1}, {"t": "tn", "q": "Câu 10: Quê hương tươi đẹp mang đến cho chúng ta những điều gì?", "o": ["Không có gì đặc biệt", "Vẻ đẹp của thiên nhiên, đồng ruộng và con người", "Chỉ có những công trình kiến trúc", "Môi trường ô nhiễm và xấu xí"], "a": 1}, {"t": "tn", "q": "Câu 11: Bên cạnh việc bảo vệ cảnh quan thiên nhiên quê hương, học sinh còn có thể làm gì để đóng góp vào sự phát triển và bền vững của địa phương?", "o": ["Tham gia các hoạt động xã hội và từ thiện", "Không có đóng góp đáng kể", "Thực hiện các hoạt động kinh tế để tạo ra lợi ích cho quê hương", "Từ bỏ sự tiến bộ công nghệ và sử dụng nguồn tài nguyên một cách không bền vững"], "a": 0}, {"t": "tn", "q": "Câu 12: Tại sao chúng ta cần chung tay bảo vệ cảnh quan địa phương?", "o": ["Vì không có tác động nào đến cảnh quan", "Để duy trì vẻ đẹp tự nhiên và sức sống của địa phương", "Chỉ vì yêu thích việc bảo vệ môi trường", "Vì cảnh quan địa phương không quan trọng"], "a": 1}, {"t": "tn", "q": "Câu 13: Khi tham gia hoạt động bảo vệ môi trường, chúng ta có thể làm gì?", "o": ["Phá hủy cây cối và không trồng cây mới", "Sử dụng nhiều túi nhựa mỗi ngày", "Tham gia trồng cây, dọn rác và tiết kiệm nước", "Không quan tâm và không làm gì cả"], "a": 2}, {"t": "tn", "q": "Câu 14: Nghề truyền thống là gì?", "o": ["Nghề công nghiệp hiện đại", "Nghề làm việc trong văn phòng", "Nghề được thực hiện từ thế hệ này sang thế hệ khác", "Nghề chỉ xuất hiện trong truyện cổ tích"], "a": 2}, {"t": "tn", "q": "Câu 15: Cách nào dưới đây góp phần bảo tồn và phát triển nghề truyền thống?", "o": ["Không làm gì và để tự nhiên tiếp tục", "Không khuyến khích giới trẻ quan tâm và tham gia nghề", "Sử dụng sản phẩm nghề truyền thống", "Thay thế nghề truyền thống bằng công nghệ hiện đại"], "a": 2}, {"t": "tn", "q": "Câu 16: Để phòng tránh bị xâm hại, chúng ta nên làm gì khi sử dụng internet?", "o": ["Chia sẻ thông tin cá nhân với bất kỳ ai", "Tự mình giải quyết và không nói với ai", "Kiểm soát và bảo vệ thông tin cá nhân", "Tin tưởng mọi người và chia sẻ tất cả mọi thứ"], "a": 2}, {"t": "tn", "q": "Câu 17: Cảnh quan thiên nhiên quê hương có thể bị tác động bởi những yếu tố nào?", "o": ["Không có yếu tố nào tác động", "Hoạt động con người, thời tiết, và sự thay đổi tự nhiên", "Chỉ bị tác động bởi hoạt động con người", "Khí hậu và địa hình của khu vực"], "a": 1}, {"t": "tn", "q": "Câu 18: Đâu là cách thức an toàn để giao tiếp với người lạ?", "o": ["Gặp mặt trực tiếp và kể cho người lạ đó chuyện cá nhân của em", "Gọi điện thoại và chia sẻ với người lạ về câu chuyện gia đình em", "Gửi tin nhắn và chia sẻ với người lạ về những vấn đề em đang gặp phải", "Tránh tiếp xúc và kể những chuyện cá nhân cho người lạ"], "a": 3}, {"t": "tn", "q": "Câu 19: Bạn đang thấy em nhỏ vứt rác xuống sông ở gần quê nhà bạn. Bạn sẽ làm gì?", "o": ["Bỏ qua và không làm gì cả", "Quát mắng em nhỏ ấy về hành vi vi phạm môi trường", "Đi tiếp và không quan tâm đến việc vứt rác", "Tự mình nhặt rác bỏ vào thùng và nói chuyện với em nhỏ về việc bảo vệ môi trường"], "a": 3}, {"t": "tn", "q": "Câu 20: Nghề thợ mộc là nghề gì?", "o": ["Nghề điều khiển máy tính", "Nghề chế tạo và sửa chữa đồ gỗ", "Nghề làm việc trong bệnh viện", "Nghề điều hành máy bay"], "a": 1}, {"t": "tl", "q": "Câu 1 (Tự luận): Chúng ta có thể làm gì để bảo vệ cảnh quan thiên nhiên quê hương?", "ans": "• Không xả rác bừa bãi ra môi trường, sông, hồ.\n• Tham gia trồng cây xanh, dọn vệ sinh nơi công cộng.\n• Tiết kiệm nước và điện trong sinh hoạt hàng ngày.\n• Nhắc nhở người thân và bạn bè cùng bảo vệ môi trường.\n• Không bẻ cành, hái hoa, phá hoại cây cối nơi công cộng.\n• Tham gia các hoạt động tình nguyện bảo vệ môi trường do trường, địa phương tổ chức."}, {"t": "tl", "q": "Câu 2 (Tự luận): Trong chuyến tham quan di tích lịch sử mà nhà trường tổ chức, các bạn rủ Nam khắc tên mình lên cột gỗ để kỉ niệm. Nếu là Nam, em sẽ hành động như thế nào trong tình huống này? Vì sao?", "ans": "Nếu là Nam, em sẽ từ chối không khắc tên lên cột gỗ và khuyên các bạn cũng không nên làm vậy.\n\nVì:\n• Khắc tên lên cột gỗ là hành vi làm hỏng, phá hoại di tích lịch sử – đây là hành vi vi phạm nội quy và pháp luật về bảo vệ di sản văn hóa.\n• Di tích lịch sử là tài sản chung của cộng đồng, cần được gìn giữ và bảo tồn để các thế hệ sau còn được chiêm ngưỡng.\n• Em sẽ nói với các bạn rằng có thể chụp ảnh lưu niệm thay vì làm hỏng di tích."}, {"t": "tl", "q": "Câu 3 (Tự luận): Em có thể làm gì để phát huy và bảo tồn nghề truyền thống?", "ans": "• Tìm hiểu và học hỏi về các nghề truyền thống của địa phương và đất nước.\n• Sử dụng và ưu tiên mua các sản phẩm của nghề truyền thống.\n• Giới thiệu, quảng bá sản phẩm nghề truyền thống với bạn bè, người thân.\n• Tham gia các buổi học, trải nghiệm làm nghề truyền thống do trường hoặc địa phương tổ chức.\n• Không coi thường những người làm nghề truyền thống.\n• Trân trọng và tự hào về các giá trị văn hóa mà nghề truyền thống mang lại."}, {"t": "tl", "q": "Câu 4 (Tự luận): Em hãy nêu những việc nên làm để phòng tránh xâm hại thân thể.", "ans": "• Không đi một mình đến nơi vắng vẻ, tối tăm.\n• Không nhận quà, tiền hoặc đi theo người lạ.\n• Mặc quần áo kín đáo, phù hợp.\n• Học các kỹ năng tự vệ cơ bản.\n• Nói không dứt khoát khi có người chạm vào vùng riêng tư trên cơ thể.\n• Luôn chia sẻ với cha mẹ, thầy cô hoặc người lớn đáng tin cậy khi gặp tình huống bất an.\n• Không chia sẻ thông tin cá nhân, hình ảnh riêng tư trên mạng xã hội.\n• Nhớ số điện thoại khẩn cấp: 113 (Công an), 111 (Tổng đài bảo vệ trẻ em)."}];
+
+let mode="all", qs=[], cur=0, ok=0, bad=0, answered=false;
+
+function pickMode(m) {
+  mode=m;
+  document.querySelectorAll(".mode-btn").forEach(b=>b.classList.remove("sel"));
+  document.getElementById("m-"+m).classList.add("sel");
+}
+
+function shuffle(a) {
+  const r=[...a];
+  for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}
+  return r;
+}
+
+function startGame() {
+  let pool=[...QS];
+  if(mode==="tn") pool=pool.filter(q=>q.t==="tn");
+  else if(mode==="tl") pool=pool.filter(q=>q.t==="tl");
+  else if(mode==="rd") pool=shuffle(pool).slice(0,10);
+  qs=pool; cur=0; ok=0; bad=0;
+  document.getElementById("homeScreen").style.display="none";
+  document.getElementById("resScreen").style.display="none";
+  document.getElementById("quizScreen").style.display="block";
+  updateSB(); render();
+}
+
+function updateSB() {
+  document.getElementById("scQ").textContent=cur+1;
+  document.getElementById("scOk").textContent=ok;
+  document.getElementById("scBad").textContent=bad;
+  document.getElementById("scLeft").textContent=qs.length-cur;
+  document.getElementById("pBar").style.width=(cur/qs.length*100)+"%";
+  document.getElementById("qBadge").textContent="Câu "+(cur+1)+"/"+qs.length;
+}
+
+function render() {
+  answered=false;
+  const q=qs[cur];
+  const card=document.getElementById("qCard");
+  card.style.animation="none";
+  setTimeout(()=>card.style.animation="slideUp .4s cubic-bezier(.34,1.56,.64,1) both",10);
+
+  document.getElementById("qText").textContent=q.q;
+  document.getElementById("qTag").textContent=q.t==="tn"?"🌟 Trắc nghiệm":"✏️ Tự luận";
+  document.getElementById("fb").style.display="none";
+  document.getElementById("ansBox").style.display="none";
+  document.getElementById("nextBtn").style.display="none";
+  document.getElementById("showBtn").style.display="none";
+
+  const area=document.getElementById("optsArea");
+  area.innerHTML="";
+
+  if(q.t==="tn") {
+    const wrap=document.createElement("div"); wrap.className="opts";
+    q.o.forEach((opt,i)=>{
+      const btn=document.createElement("button"); btn.className="opt";
+      btn.innerHTML=`<span class="ltr">${LT[i]}</span><span>${opt}</span>`;
+      btn.onclick=()=>pick(i);
+      wrap.appendChild(btn);
+    });
+    area.appendChild(wrap);
+  } else {
+    const hint=document.createElement("p");
+    hint.style.cssText="font-size:14px;color:#BDBDBD;text-align:center;padding:20px 0;font-weight:700;";
+    hint.textContent="🤔 Hãy suy nghĩ câu trả lời, rồi nhấn xem đáp án!";
+    area.appendChild(hint);
+    document.getElementById("ansBody").textContent=q.ans;
+    document.getElementById("showBtn").style.display="block";
+  }
+}
+
+function pick(chosen) {
+  if(answered) return;
+  answered=true;
+  const q=qs[cur];
+  const btns=document.querySelectorAll(".opt");
+  btns.forEach(b=>b.disabled=true);
+  const isOk=chosen===q.a;
+  btns[chosen].classList.add(isOk?"correct":"wrong");
+  if(!isOk){btns[q.a].classList.add("correct");bad++;}
+  else{ok++;confetti(5);}
+  const fb=document.getElementById("fb");
+  fb.style.display="block";
+  if(isOk){
+    fb.className="fb ok";
+    fb.innerHTML='<span class="emo">⭐</span> Chính xác! Giỏi lắm!';
+  }else{
+    fb.className="fb bad";
+    fb.innerHTML=`<span class="emo">💪</span> Chưa đúng! Đáp án đúng là <strong>${LT[q.a]}. ${q.o[q.a]}</strong>`;
+  }
+  updateSB();
+  const nb=document.getElementById("nextBtn");
+  nb.style.display="block";
+  nb.textContent=cur<qs.length-1?"Câu tiếp theo →":"🏁 Xem kết quả";
+}
+
+function revealAnswer() {
+  document.getElementById("ansBox").style.display="block";
+  document.getElementById("showBtn").style.display="none";
+  const nb=document.getElementById("nextBtn");
+  nb.style.display="block";
+  nb.textContent=cur<qs.length-1?"Câu tiếp theo →":"🏁 Xem kết quả";
+  ok++; updateSB();
+}
+
+function goNext() {
+  cur++;
+  if(cur>=qs.length){showRes();return;}
+  updateSB(); render();
+}
+
+function showRes() {
+  document.getElementById("quizScreen").style.display="none";
+  document.getElementById("resScreen").style.display="block";
+  const pct=Math.round(ok/qs.length*100);
+  document.getElementById("rScore").textContent=ok+"/"+qs.length;
+  document.getElementById("rOk").textContent=ok;
+  document.getElementById("rBad").textContent=bad;
+  let trophy,title,msg;
+  if(pct>=90){trophy="🏆";title="Xuất sắc!";msg="Em học rất giỏi! Thầy/cô tự hào về em! 🌟";}
+  else if(pct>=70){trophy="🥈";title="Giỏi lắm!";msg="Em làm rất tốt! Cố gắng thêm một chút nhé! 💪";}
+  else if(pct>=50){trophy="🥉";title="Cố lên!";msg="Em cần ôn thêm! Em có thể làm được! 📖";}
+  else{trophy="📚";title="Ôn thêm nhé!";msg="Đừng nản lòng, ôn tập lại và thử lại nhé! 🌈";}
+  document.getElementById("rTrophy").textContent=trophy;
+  document.getElementById("rTitle").textContent=title;
+  document.getElementById("rMsg").textContent=msg;
+  if(pct>=70) confetti(40);
+}
+
+function goHome() {
+  document.getElementById("resScreen").style.display="none";
+  document.getElementById("homeScreen").style.display="block";
+  cur=0;ok=0;bad=0;
+}
+
+function confetti(n) {
+  const wrap=document.getElementById("cfWrap");
+  const cols=["#9C27B0","#E91E63","#00BCD4","#FFC107","#43A047","#FF5722"];
+  for(let i=0;i<n;i++){
+    const el=document.createElement("div"); el.className="cf";
+    const c=cols[Math.floor(Math.random()*cols.length)];
+    el.style.cssText=`left:${Math.random()*100}vw;top:-20px;background:${c};width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;border-radius:${Math.random()>.5?"50%":"2px"};animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*.5}s;`;
+    wrap.appendChild(el); el.addEventListener("animationend",()=>el.remove());
+  }
+}
+</script>
+</body>
+</html>
