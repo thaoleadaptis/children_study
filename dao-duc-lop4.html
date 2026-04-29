@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ôn Tập Đạo Đức Lớp 4</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold:#F59E0B; --gold-d:#92400E; --red:#DC2626; --red-d:#7F1D1D;
+    --blue:#2563EB; --blue-d:#1E3A8A; --green:#16A34A; --green-d:#14532D;
+    --rose:#E11D48; --shadow:rgba(0,0,0,0.12);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Nunito",sans-serif;min-height:100vh;
+    background:linear-gradient(145deg,#FEF3C7 0%,#FEE2E2 50%,#DBEAFE 100%);
+    color:#1C1917;overflow-x:hidden;
+  }
+  body::before{
+    content:"❤️🌸💛";position:fixed;top:10px;left:-140px;font-size:46px;
+    opacity:.12;animation:drift 30s linear infinite;pointer-events:none;z-index:0;
+  }
+  @keyframes drift{from{transform:translateX(0)}to{transform:translateX(110vw)}}
+  .app{max-width:760px;margin:0 auto;padding:20px 16px 70px;position:relative;z-index:1}
+
+  .header{text-align:center;margin-bottom:22px;animation:popIn .6s cubic-bezier(.34,1.56,.64,1) both}
+  @keyframes popIn{from{opacity:0;transform:scale(.7) translateY(-20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+  .header .icons{font-size:48px;display:flex;justify-content:center;gap:8px;margin-bottom:6px}
+  .header .icons span{display:inline-block;animation:heartbeat 2s ease-in-out infinite}
+  .header .icons span:nth-child(2){animation-delay:.4s}.header .icons span:nth-child(3){animation-delay:.8s}
+  @keyframes heartbeat{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+  .header h1{font-family:"Pacifico",cursive;font-size:clamp(22px,5vw,34px);color:var(--gold-d);
+    text-shadow:0 3px 0 rgba(255,255,255,.8),0 5px 12px rgba(0,0,0,.1)}
+  .header p{font-size:14px;color:var(--blue-d);font-weight:700;margin-top:5px}
+
+  .scorebar{display:flex;justify-content:space-around;background:white;border-radius:22px;
+    padding:10px 8px;margin-bottom:16px;box-shadow:0 4px 20px var(--shadow);
+    animation:popIn .65s cubic-bezier(.34,1.56,.64,1) .1s both}
+  .sc-item{text-align:center}
+  .sc-item .lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#9CA3AF}
+  .sc-item .val{font-family:"Pacifico",cursive;font-size:26px;line-height:1;color:var(--gold-d)}
+  .sc-item .val.ok{color:var(--green-d)}.sc-item .val.bad{color:var(--red)}
+
+  .progress-track{height:10px;background:#FDE68A;border-radius:10px;margin-bottom:16px;
+    overflow:hidden;box-shadow:inset 0 2px 4px rgba(0,0,0,.06)}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--rose));
+    border-radius:10px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+
+  .card{background:white;border-radius:26px;padding:24px 20px;box-shadow:0 8px 32px var(--shadow);
+    margin-bottom:16px;animation:slideUp .4s cubic-bezier(.34,1.56,.64,1) both;
+    border-top:5px solid var(--gold)}
+  @keyframes slideUp{from{opacity:0;transform:translateY(28px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+  .q-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .q-badge{background:linear-gradient(135deg,var(--gold),var(--gold-d));color:white;
+    font-family:"Pacifico",cursive;font-size:13px;padding:5px 15px;border-radius:20px}
+  .q-tag{font-size:11px;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:.06em}
+  .q-text{font-size:clamp(15px,3.5vw,19px);font-weight:800;color:#1C1917;line-height:1.55;margin-bottom:18px}
+
+  .opts{display:flex;flex-direction:column;gap:9px}
+  .opt{display:flex;align-items:center;gap:12px;background:#FFFBEB;border:2.5px solid #FDE68A;
+    border-radius:16px;padding:12px 15px;cursor:pointer;font-size:15px;font-weight:600;
+    color:#78350F;transition:all .17s ease;text-align:left;width:100%;font-family:"Nunito",sans-serif}
+  .opt:hover:not(:disabled){background:#FEF3C7;border-color:var(--gold);transform:translateX(5px);
+    box-shadow:0 4px 14px rgba(245,158,11,.22)}
+  .opt .ltr{min-width:32px;width:32px;height:32px;border-radius:50%;background:white;
+    border:2px solid #FDE68A;display:flex;align-items:center;justify-content:center;
+    font-family:"Pacifico",cursive;font-size:14px;color:var(--gold-d);transition:all .17s;flex-shrink:0}
+  .opt:disabled{cursor:default}
+  .opt.correct{background:#F0FDF4;border-color:var(--green);color:var(--green-d);
+    animation:boing .4s cubic-bezier(.34,1.56,.64,1)}
+  .opt.correct .ltr{background:var(--green);border-color:var(--green);color:white}
+  .opt.wrong{background:#FFF1F2;border-color:var(--red);color:var(--red-d);animation:jiggle .4s ease}
+  .opt.wrong .ltr{background:var(--red);border-color:var(--red);color:white}
+  @keyframes boing{0%{transform:scale(1)}50%{transform:scale(1.04) translateX(4px)}100%{transform:scale(1)}}
+  @keyframes jiggle{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+
+  .fb{display:none;margin-top:13px;padding:13px 16px;border-radius:14px;font-size:15px;
+    font-weight:700;animation:fadeIn .3s ease}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .fb.ok{background:#F0FDF4;border:2px solid var(--green);color:var(--green-d)}
+  .fb.bad{background:#FFFBEB;border:2px solid var(--gold);color:var(--gold-d)}
+  .fb .emo{font-size:20px;margin-right:6px}
+
+  .ans-box{display:none;margin-top:13px;background:#FFFBEB;border:2.5px solid var(--gold);
+    border-radius:16px;padding:15px;animation:fadeIn .4s ease}
+  .ans-box .ans-hd{font-family:"Pacifico",cursive;font-size:12px;color:var(--gold-d);
+    text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+  .ans-box .ans-body{font-size:14px;line-height:1.9;color:#78350F;white-space:pre-line;font-weight:600}
+
+  .show-btn{display:none;margin-top:13px;background:linear-gradient(135deg,#F59E0B,#D97706);
+    color:white;border:none;border-radius:14px;padding:11px 22px;font-family:"Pacifico",cursive;
+    font-size:15px;cursor:pointer;box-shadow:0 4px 14px rgba(245,158,11,.35);transition:all .17s}
+  .show-btn:hover{transform:translateY(-2px)}
+  .next-btn{display:none;width:100%;margin-top:13px;
+    background:linear-gradient(135deg,var(--blue),var(--blue-d));color:white;border:none;
+    border-radius:18px;padding:15px;font-family:"Pacifico",cursive;font-size:18px;cursor:pointer;
+    box-shadow:0 6px 22px rgba(37,99,235,.28);transition:all .17s;letter-spacing:.04em}
+  .next-btn:hover{transform:translateY(-3px)}
+
+  .home{animation:slideUp .5s cubic-bezier(.34,1.56,.64,1) both}
+  .home-card{background:white;border-radius:26px;padding:24px 20px;
+    box-shadow:0 8px 32px var(--shadow);border-top:5px solid var(--rose)}
+  .mode-title{font-family:"Pacifico",cursive;font-size:19px;color:var(--gold-d);
+    text-align:center;margin-bottom:16px}
+  .mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:16px}
+  .mode-btn{background:#FFFBEB;border:3px solid #FDE68A;border-radius:20px;padding:17px 11px;
+    cursor:pointer;text-align:center;transition:all .2s;font-family:"Pacifico",cursive}
+  .mode-btn:hover{border-color:var(--gold);transform:translateY(-4px);box-shadow:0 8px 22px rgba(245,158,11,.2)}
+  .mode-btn.sel{border-color:var(--gold);background:#FEF3C7}
+  .mode-btn .mi{font-size:36px;display:block;margin-bottom:5px}
+  .mode-btn .mn{font-size:15px;font-weight:800;display:block;color:var(--gold-d)}
+  .mode-btn .md{font-size:12px;font-weight:600;color:#9CA3AF;display:block;margin-top:3px;font-family:"Nunito",sans-serif}
+  .start-btn{width:100%;background:linear-gradient(135deg,var(--gold),var(--gold-d));color:white;
+    border:none;border-radius:18px;padding:17px;font-family:"Pacifico",cursive;font-size:21px;
+    cursor:pointer;box-shadow:0 8px 24px rgba(245,158,11,.35);transition:all .18s}
+  .start-btn:hover{transform:translateY(-3px) scale(1.01)}
+
+  .results{display:none;animation:slideUp .5s cubic-bezier(.34,1.56,.64,1) both}
+  .res-card{background:white;border-radius:28px;padding:34px 24px;box-shadow:0 12px 44px var(--shadow);
+    text-align:center;border-top:6px solid var(--gold)}
+  .trophy{font-size:84px;display:block;margin-bottom:8px;
+    animation:trophyBounce .8s cubic-bezier(.34,1.56,.64,1) .2s both}
+  @keyframes trophyBounce{from{transform:scale(0) rotate(-20deg)}to{transform:scale(1) rotate(0)}}
+  .res-title{font-family:"Pacifico",cursive;font-size:28px;color:var(--gold-d)}
+  .res-score{font-family:"Pacifico",cursive;font-size:58px;
+    background:linear-gradient(135deg,var(--gold-d),var(--rose));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    background-clip:text;line-height:1;margin:10px 0}
+  .res-msg{font-size:16px;color:#6B7280;font-weight:700;margin-bottom:20px}
+  .res-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+  .res-stat{background:#FFFBEB;border-radius:16px;padding:13px}
+  .res-stat .sv{font-family:"Pacifico",cursive;font-size:28px}
+  .res-stat .sl{font-size:13px;font-weight:700;color:#9CA3AF}
+  .res-stat.g .sv{color:var(--green-d)}.res-stat.r .sv{color:var(--red)}
+  .restart-btn{background:linear-gradient(135deg,var(--gold),var(--gold-d));color:white;
+    border:none;border-radius:18px;padding:17px 42px;font-family:"Pacifico",cursive;font-size:20px;
+    cursor:pointer;box-shadow:0 8px 24px rgba(245,158,11,.32);transition:all .18s}
+  .restart-btn:hover{transform:translateY(-3px) scale(1.02)}
+
+  .cfwrap{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:999;overflow:hidden}
+  .cf{position:absolute;border-radius:2px;animation:cffall linear forwards}
+  @keyframes cffall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}
+    100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+  @media(max-width:480px){.mode-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div class="icons"><span>❤️</span><span>🤝</span><span>💛</span></div>
+    <h1>Ôn Tập Đạo Đức</h1>
+    <p>📖 Lớp 4 – Cuối Học Kì II</p>
+  </div>
+
+  <div class="home" id="homeScreen">
+    <div class="home-card">
+      <div class="mode-title">🎮 Chọn chế độ ôn tập</div>
+      <div class="mode-grid">
+        <div class="mode-btn sel" id="m-all" onclick="pickMode('all')"><span class="mi">📋</span><span class="mn">Tất Cả</span><span class="md">25 câu hỏi</span></div>
+        <div class="mode-btn" id="m-tn" onclick="pickMode('tn')"><span class="mi">🅰️</span><span class="mn">Trắc Nghiệm</span><span class="md">20 câu hỏi</span></div>
+        <div class="mode-btn" id="m-tl" onclick="pickMode('tl')"><span class="mi">✍️</span><span class="mn">Tự Luận</span><span class="md">5 câu hỏi</span></div>
+        <div class="mode-btn" id="m-rd" onclick="pickMode('rd')"><span class="mi">🎲</span><span class="mn">Ngẫu Nhiên</span><span class="md">10 câu bất kỳ</span></div>
+      </div>
+      <button class="start-btn" onclick="startGame()">🚀 Bắt đầu ôn tập!</button>
+    </div>
+  </div>
+
+  <div id="quizScreen" style="display:none;">
+    <div class="scorebar">
+      <div class="sc-item"><div class="lbl">Câu</div><div class="val" id="scQ">1</div></div>
+      <div class="sc-item"><div class="lbl">Đúng</div><div class="val ok" id="scOk">0</div></div>
+      <div class="sc-item"><div class="lbl">Sai</div><div class="val bad" id="scBad">0</div></div>
+      <div class="sc-item"><div class="lbl">Còn lại</div><div class="val" id="scLeft">0</div></div>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="pBar" style="width:0%"></div></div>
+    <div class="card" id="qCard">
+      <div class="q-meta">
+        <span class="q-badge" id="qBadge">Câu 1</span>
+        <span class="q-tag" id="qTag">Trắc nghiệm</span>
+      </div>
+      <div class="q-text" id="qText"></div>
+      <div id="optsArea"></div>
+      <div class="fb" id="fb"></div>
+      <div class="ans-box" id="ansBox"><div class="ans-hd">✅ Gợi ý đáp án</div><div class="ans-body" id="ansBody"></div></div>
+      <button class="show-btn" id="showBtn" onclick="revealAnswer()">💡 Xem đáp án</button>
+      <button class="next-btn" id="nextBtn" onclick="goNext()">Câu tiếp theo →</button>
+    </div>
+  </div>
+
+  <div class="results" id="resScreen">
+    <div class="res-card">
+      <span class="trophy" id="rTrophy">🏆</span>
+      <div class="res-title" id="rTitle">Xuất sắc!</div>
+      <div class="res-score" id="rScore">0/0</div>
+      <div class="res-msg" id="rMsg"></div>
+      <div class="res-grid">
+        <div class="res-stat g"><div class="sv" id="rOk">0</div><div class="sl">✅ Câu đúng</div></div>
+        <div class="res-stat r"><div class="sv" id="rBad">0</div><div class="sl">❌ Câu sai</div></div>
+      </div>
+      <button class="restart-btn" onclick="goHome()">🏠 Chơi lại</button>
+    </div>
+  </div>
+</div>
+<div class="cfwrap" id="cfWrap"></div>
+
+<script>
+const LT = ["A","B","C","D"];
+const QS = [{"t": "tn", "q": "Câu 1. Tại sao chúng ta cần tôn trọng tài sản của người khác?", "o": ["Vì đó là tài sản của người khác và họ có quyền quyết định", "Vì tài sản của người khác không quan trọng", "Vì chỉ có tài sản của mình mới đáng quý", "Vì có thể lấy được mà không bị phạt"], "a": 0}, {"t": "tn", "q": "Câu 2. Hành động nào thể hiện sự tôn trọng tài sản của người khác?", "o": ["Vẽ bậy lên bàn học của lớp", "Lấy bút của bạn mà không xin phép", "Giữ gìn sách vở mượn từ thư viện", "Làm rơi đồ của bạn mà không nhặt lên"], "a": 2}, {"t": "tn", "q": "Câu 3. Tình bạn thật sự là khi:", "o": ["Luôn cho bạn mình mượn bài", "Chỉ chơi với bạn học giỏi", "Quan tâm, chia sẻ và tin tưởng nhau", "Chơi với bạn để được lợi"], "a": 2}, {"t": "tn", "q": "Câu 4. Khi em và bạn có ý kiến khác nhau, em nên:", "o": ["Tranh cãi đến cùng", "Lắng nghe và tôn trọng ý kiến của bạn", "Bỏ ngoài tai lời bạn nói", "Tự quyết định mọi việc"], "a": 1}, {"t": "tn", "q": "Câu 5. Điều gì có thể làm rạn nứt tình bạn?", "o": ["Chơi thể thao cùng nhau", "Tặng quà cho nhau", "Nói xấu sau lưng bạn", "Cùng nhau học bài"], "a": 2}, {"t": "tn", "q": "Câu 6. \"Của công\" là gì?", "o": ["Là đồ của người bán hàng", "Là tài sản của riêng mình", "Là tài sản chung của mọi người", "Là đồ của người giàu có"], "a": 2}, {"t": "tn", "q": "Câu 7. Vì sao chúng ta cần bảo vệ của công?", "o": ["Vì sợ bị phạt", "Vì để thể hiện mình ngoan", "Vì của công là tài sản chung, cần giữ gìn cho mọi người cùng sử dụng", "Vì muốn được khen"], "a": 2}, {"t": "tn", "q": "Câu 8. Đối với những công trình công cộng, mọi người dân đều có trách nhiệm:", "o": ["Phá bỏ", "Bảo vệ, giữ gìn", "Đập phá nếu không thích", "Xây dựng theo ý mình"], "a": 1}, {"t": "tn", "q": "Câu 9. Điều gì quan trọng nhất để kết bạn với một người bạn mới?", "o": ["Chỉ chơi với bạn khi bạn ấy có quà", "Làm quen và chia sẻ những điều vui vẻ", "Không nói chuyện với bạn mới", "Cứ đợi bạn mới tự đến chơi với mình"], "a": 1}, {"t": "tn", "q": "Câu 10. Tình bạn bền lâu dựa trên điều gì?", "o": ["Cả hai cùng yêu thích một môn thể thao", "Sự hiểu biết, chia sẻ và lòng tin", "Cùng nhau học giỏi", "Được người khác khen ngợi"], "a": 1}, {"t": "tn", "q": "Câu 11. Hành động nào dưới đây giúp giữ gìn tình bạn lâu dài?", "o": ["Tranh giành đồ chơi với bạn", "Chia sẻ đồ dùng học tập với bạn", "Ghen tị với thành tích của bạn", "Cười khi bạn gặp chuyện buồn"], "a": 1}, {"t": "tn", "q": "Câu 12. Em cần làm gì để thể hiện lòng yêu thương con người?", "o": ["Phớt lờ khi thấy bạn khóc", "Cười nhạo người nghèo", "Giúp đỡ người gặp khó khăn", "Trêu chọc người khuyết tật"], "a": 2}, {"t": "tn", "q": "Câu 13. Nam đã không mua truyện tranh mà để dành tiền để ủng hộ các bạn học sinh ở các tỉnh đang bị lũ lụt. Em thấy việc làm này của bạn thể hiện điều gì?", "o": ["Việc làm nhân đạo của bạn Nam", "Việc làm vô ích của bạn Nam", "Không thể hiện điều gì cả", "Việc làm thiếu trách nhiệm của bạn Nam"], "a": 0}, {"t": "tn", "q": "Câu 14. Đồng tiền là kết quả của:", "o": ["Lao động và sự nỗ lực của mọi người", "Việc đi chơi và mua sắm", "Việc tiêu xài không suy nghĩ", "Việc nhờ vả người khác"], "a": 0}, {"t": "tn", "q": "Câu 15. Nếu em nhận được một số tiền từ người lớn, em nên làm gì?", "o": ["Tiêu hết ngay lập tức", "Dùng một phần cho việc cần thiết, một phần tiết kiệm cho tương lai", "Đưa hết cho bạn bè", "Không cần suy nghĩ, cứ tiêu xài thoải mái"], "a": 1}, {"t": "tn", "q": "Câu 16. Em thể hiện sự tiết kiệm bằng cách nào?", "o": ["Vứt bỏ giấy còn dùng được", "Tắt điện khi không dùng đến", "Dùng tiền không cần suy nghĩ", "Cứ thích là mua sắm đồ"], "a": 1}, {"t": "tn", "q": "Câu 17. Ý nghĩa quan trọng nhất của việc quý trọng đồng tiền là:", "o": ["Làm cho mình giàu có hơn", "Giúp mình được khen", "Biết trân trọng công sức lao động của người khác", "Tiết kiệm để khoe với bạn"], "a": 2}, {"t": "tn", "q": "Câu 18. Quyền của trẻ em là gì?", "o": ["Được tự do làm mọi điều mình muốn", "Được đi học, được chăm sóc sức khoẻ, được vui chơi", "Không cần phải làm gì cả", "Được yêu cầu mọi người làm theo ý mình"], "a": 1}, {"t": "tn", "q": "Câu 19. Trẻ em có bổn phận gì sau đây?", "o": ["Chỉ học khi thích", "Không cần làm việc nhà vì còn nhỏ", "Không quan tâm đến người khác", "Tôn trọng, vâng lời ông bà, cha mẹ, thầy cô"], "a": 3}, {"t": "tn", "q": "Câu 20. Trẻ em cần làm gì để bảo vệ quyền lợi của mình?", "o": ["Im lặng khi có vấn đề xảy ra", "Báo cho người lớn hoặc thầy cô khi bị xâm phạm quyền lợi", "Không nói với ai và giữ trong lòng", "Không quan tâm đến quyền lợi của mình"], "a": 1}, {"t": "tl", "q": "Câu 1 (Tự luận): Nếu em là một người bạn tốt, em sẽ giúp đỡ bạn bè như thế nào trong học tập và trong cuộc sống? Hãy nêu một ví dụ cụ thể.", "ans": "Nếu là một người bạn tốt, em sẽ:\n• Trong học tập: Giúp bạn giải thích bài khi bạn chưa hiểu, cho bạn mượn sách vở khi cần, cùng bạn ôn bài trước khi kiểm tra.\n• Trong cuộc sống: Động viên khi bạn buồn, chia sẻ đồ ăn khi bạn quên mang cơm, bảo vệ bạn khi bạn bị bắt nạt.\n\nVí dụ cụ thể: Khi bạn Minh bị ốm phải nghỉ học, em chép bài hộ và đến nhà giảng lại bài cho bạn để bạn không bị mất kiến thức."}, {"t": "tl", "q": "Câu 2 (Tự luận): Vì sao chúng ta cần phải quý trọng đồng tiền?", "ans": "Chúng ta cần quý trọng đồng tiền vì:\n• Đồng tiền là kết quả của lao động vất vả và sự nỗ lực của cha mẹ, người thân.\n• Quý trọng đồng tiền là biết trân trọng công sức của người đã làm ra nó.\n• Biết tiết kiệm giúp gia đình có thêm tiền để dùng cho những việc quan trọng như học hành, chữa bệnh.\n• Tiêu xài lãng phí là không tôn trọng sức lao động của người khác và gây lãng phí cho xã hội."}, {"t": "tl", "q": "Câu 3 (Tự luận): Nếu em thấy một bạn cố tình làm hỏng tài sản của trường, em sẽ làm gì?", "ans": "Nếu thấy bạn cố tình làm hỏng tài sản của trường, em sẽ:\n• Nhắc nhở bạn dừng lại vì đó là tài sản chung của toàn trường, làm hỏng sẽ ảnh hưởng đến nhiều người.\n• Giải thích cho bạn hiểu rằng của công cần được bảo vệ và giữ gìn.\n• Nếu bạn không nghe, em sẽ báo với thầy cô hoặc người lớn để can thiệp kịp thời.\n• Em sẽ không tham gia hay cổ vũ hành động phá hoại đó."}, {"t": "tl", "q": "Câu 4 (Tự luận): Em hãy kể về một tình bạn đẹp của bản thân hoặc của các bạn khác mà em biết. Chia sẻ những việc em đã và sẽ làm để duy trì tình bạn.", "ans": "Một tình bạn đẹp mà em biết: Em và bạn Lan chơi thân với nhau từ lớp 1. Khi em bị ốm phải nghỉ học, Lan đã đến nhà chép bài cho em. Khi Lan buồn vì điểm kém, em ngồi ôn bài cùng bạn và động viên bạn cố gắng.\n\nNhững việc em đã làm để duy trì tình bạn:\n• Luôn lắng nghe và chia sẻ khi bạn có chuyện vui hay buồn.\n• Không nói xấu bạn sau lưng.\n• Giúp đỡ bạn khi bạn gặp khó khăn.\n\nNhững việc em sẽ tiếp tục làm:\n• Tôn trọng ý kiến của bạn dù đôi khi khác ý mình.\n• Luôn trung thực và giữ lời hứa với bạn."}, {"t": "tl", "q": "Câu 5 (Tự luận): Quyền được yêu thương, chăm sóc của trẻ em có ý nghĩa gì? Em nghĩ mình nên làm gì để đáp lại tình yêu thương của cha mẹ và thầy cô?", "ans": "Ý nghĩa của quyền được yêu thương, chăm sóc:\n• Giúp trẻ em được lớn lên trong môi trường an toàn, hạnh phúc.\n• Được chăm sóc sức khoẻ, học hành và vui chơi đầy đủ.\n• Giúp trẻ em phát triển toàn diện về thể chất và tinh thần.\n• Tạo nền tảng để trẻ trở thành người tốt trong tương lai.\n\nĐể đáp lại tình yêu thương của cha mẹ và thầy cô, em sẽ:\n• Chăm chỉ học tập, cố gắng đạt kết quả tốt.\n• Vâng lời và kính trọng cha mẹ, thầy cô.\n• Giúp đỡ việc nhà phù hợp với lứa tuổi.\n• Không làm những điều khiến cha mẹ, thầy cô buồn lòng.\n• Luôn chia sẻ với cha mẹ những vui buồn trong cuộc sống."}];
+
+let mode="all", qs=[], cur=0, ok=0, bad=0, answered=false;
+
+function pickMode(m) {
+  mode=m;
+  document.querySelectorAll(".mode-btn").forEach(b=>b.classList.remove("sel"));
+  document.getElementById("m-"+m).classList.add("sel");
+}
+function shuffle(a) {
+  const r=[...a];
+  for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}
+  return r;
+}
+function startGame() {
+  let pool=[...QS];
+  if(mode==="tn") pool=pool.filter(q=>q.t==="tn");
+  else if(mode==="tl") pool=pool.filter(q=>q.t==="tl");
+  else if(mode==="rd") pool=shuffle(pool).slice(0,10);
+  qs=pool; cur=0; ok=0; bad=0;
+  document.getElementById("homeScreen").style.display="none";
+  document.getElementById("resScreen").style.display="none";
+  document.getElementById("quizScreen").style.display="block";
+  updateSB(); render();
+}
+function updateSB() {
+  document.getElementById("scQ").textContent=cur+1;
+  document.getElementById("scOk").textContent=ok;
+  document.getElementById("scBad").textContent=bad;
+  document.getElementById("scLeft").textContent=qs.length-cur;
+  document.getElementById("pBar").style.width=(cur/qs.length*100)+"%";
+  document.getElementById("qBadge").textContent="Câu "+(cur+1)+"/"+qs.length;
+}
+function render() {
+  answered=false;
+  const q=qs[cur];
+  const card=document.getElementById("qCard");
+  card.style.animation="none";
+  setTimeout(()=>card.style.animation="slideUp .4s cubic-bezier(.34,1.56,.64,1) both",10);
+  document.getElementById("qText").textContent=q.q;
+  document.getElementById("qTag").textContent=q.t==="tn"?"❤️ Trắc nghiệm":"✏️ Tự luận";
+  document.getElementById("fb").style.display="none";
+  document.getElementById("ansBox").style.display="none";
+  document.getElementById("nextBtn").style.display="none";
+  document.getElementById("showBtn").style.display="none";
+  const area=document.getElementById("optsArea");
+  area.innerHTML="";
+  if(q.t==="tn") {
+    const wrap=document.createElement("div"); wrap.className="opts";
+    q.o.forEach((opt,i)=>{
+      const btn=document.createElement("button"); btn.className="opt";
+      btn.innerHTML=`<span class="ltr">${LT[i]}</span><span>${opt}</span>`;
+      btn.onclick=()=>pick(i);
+      wrap.appendChild(btn);
+    });
+    area.appendChild(wrap);
+  } else {
+    const hint=document.createElement("p");
+    hint.style.cssText="font-size:14px;color:#D1D5DB;text-align:center;padding:20px 0;font-weight:700;";
+    hint.textContent="🤔 Hãy suy nghĩ câu trả lời, rồi nhấn xem đáp án!";
+    area.appendChild(hint);
+    document.getElementById("ansBody").textContent=q.ans;
+    document.getElementById("showBtn").style.display="block";
+  }
+}
+function pick(chosen) {
+  if(answered) return;
+  answered=true;
+  const q=qs[cur];
+  const btns=document.querySelectorAll(".opt");
+  btns.forEach(b=>b.disabled=true);
+  const isOk=chosen===q.a;
+  btns[chosen].classList.add(isOk?"correct":"wrong");
+  if(!isOk){btns[q.a].classList.add("correct");bad++;}
+  else{ok++;confetti(5);}
+  const fb=document.getElementById("fb");
+  fb.style.display="block";
+  if(isOk){
+    fb.className="fb ok";
+    fb.innerHTML='<span class="emo">⭐</span> Chính xác! Giỏi lắm!';
+  }else{
+    fb.className="fb bad";
+    fb.innerHTML=`<span class="emo">💪</span> Chưa đúng! Đáp án đúng là <strong>${LT[q.a]}. ${q.o[q.a]}</strong>`;
+  }
+  updateSB();
+  const nb=document.getElementById("nextBtn");
+  nb.style.display="block";
+  nb.textContent=cur<qs.length-1?"Câu tiếp theo →":"🏁 Xem kết quả";
+}
+function revealAnswer() {
+  document.getElementById("ansBox").style.display="block";
+  document.getElementById("showBtn").style.display="none";
+  const nb=document.getElementById("nextBtn");
+  nb.style.display="block";
+  nb.textContent=cur<qs.length-1?"Câu tiếp theo →":"🏁 Xem kết quả";
+  ok++; updateSB();
+}
+function goNext() {
+  cur++;
+  if(cur>=qs.length){showRes();return;}
+  updateSB(); render();
+}
+function showRes() {
+  document.getElementById("quizScreen").style.display="none";
+  document.getElementById("resScreen").style.display="block";
+  const pct=Math.round(ok/qs.length*100);
+  document.getElementById("rScore").textContent=ok+"/"+qs.length;
+  document.getElementById("rOk").textContent=ok;
+  document.getElementById("rBad").textContent=bad;
+  let trophy,title,msg;
+  if(pct>=90){trophy="🏆";title="Xuất sắc!";msg="Em học rất giỏi! Thầy/cô tự hào về em! 🌟";}
+  else if(pct>=70){trophy="🥈";title="Giỏi lắm!";msg="Em làm rất tốt! Cố gắng thêm một chút nhé! 💪";}
+  else if(pct>=50){trophy="🥉";title="Cố lên!";msg="Em cần ôn thêm! Em có thể làm được! 📖";}
+  else{trophy="📚";title="Ôn thêm nhé!";msg="Đừng nản lòng, ôn tập lại và thử lại nhé! 🌈";}
+  document.getElementById("rTrophy").textContent=trophy;
+  document.getElementById("rTitle").textContent=title;
+  document.getElementById("rMsg").textContent=msg;
+  if(pct>=70) confetti(40);
+}
+function goHome() {
+  document.getElementById("resScreen").style.display="none";
+  document.getElementById("homeScreen").style.display="block";
+  cur=0;ok=0;bad=0;
+}
+function confetti(n) {
+  const wrap=document.getElementById("cfWrap");
+  const cols=["#F59E0B","#E11D48","#2563EB","#16A34A","#7C3AED","#EA580C"];
+  for(let i=0;i<n;i++){
+    const el=document.createElement("div"); el.className="cf";
+    const c=cols[Math.floor(Math.random()*cols.length)];
+    el.style.cssText=`left:${Math.random()*100}vw;top:-20px;background:${c};width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;border-radius:${Math.random()>.5?"50%":"2px"};animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*.5}s;`;
+    wrap.appendChild(el); el.addEventListener("animationend",()=>el.remove());
+  }
+}
+</script>
+</body>
+</html>
